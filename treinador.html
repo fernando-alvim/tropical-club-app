@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Club - Painel do Treinador</title>
+    <!-- Script de Inicialização Rápida de Tema -->
+    <script src="theme.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #27272a; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
+    </style>
+</head>
+<body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans min-h-screen flex flex-col antialiased transition-colors duration-200">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4 transition-colors duration-200">
+        <!-- Brand & Club Identity (Padrão Preto e Branco Oficial) -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black tracking-tighter text-sm border border-neutral-800 dark:border-neutral-200 shadow-sm">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 10a8 8 0 0 1 16 0v4a8 8 0 0 1-16 0z"></path>
+                    <path d="M8 10a4 4 0 0 1 8 0v4a4 4 0 0 1-8 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-base font-black tracking-widest uppercase text-black dark:text-white">TROPICAL CLUB</h1>
+                    <span class="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-black dark:bg-white text-white dark:text-black">COACH</span>
+                </div>
+                <p class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Comunidad Running BRAR &middot; Gestão de Treinos & Provas</p>
+            </div>
+        </div>
+
+        <!-- Week Navigation & Global Actions -->
+        <div class="flex items-center flex-wrap gap-2.5">
+            <!-- Week Selector -->
+            <div class="flex items-center bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-1 text-xs shadow-xs">
+                <button onclick="changeWeek(-1)" class="px-2.5 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div id="week-display-label" class="px-3 py-1 font-semibold text-neutral-800 dark:text-neutral-200">
+                    Semana Atual
+                </div>
+                <button onclick="changeWeek(1)" class="px-2.5 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Botão de Alternar Tema (Claro / Escuro) -->
+            <button onclick="toggleTheme()" class="theme-toggle-btn p-2.5 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl transition text-xs flex items-center justify-center text-neutral-700 dark:text-neutral-300 shadow-xs">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- Prescrever Treino (CTA Principal) -->
+            <button onclick="openNewWorkoutModal()" class="flex items-center gap-2 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition transform active:scale-95">
+                <i class="fa-solid fa-plus"></i>
+                <span>Prescrever Treino</span>
+            </button>
+
+            <!-- Novo Aluno -->
+            <button onclick="openNewRunnerModal()" class="flex items-center gap-2 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-xs transition">
+                <i class="fa-solid fa-user-plus text-neutral-500 dark:text-neutral-400"></i>
+                <span class="hidden sm:inline">Novo Aluno</span>
+            </button>
+
+            <!-- Cadastrar Prova / Maratona -->
+            <button onclick="openNewRaceModal()" class="flex items-center gap-2 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-xs transition">
+                <i class="fa-solid fa-flag-checkered text-neutral-500 dark:text-neutral-400"></i>
+                <span class="hidden sm:inline">Nova Prova</span>
+            </button>
+
+            <!-- Publicar Foto na Galeria -->
+            <button onclick="openNewPhotoModal()" class="flex items-center gap-2 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-xs transition">
+                <i class="fa-solid fa-camera text-neutral-500 dark:text-neutral-400"></i>
+                <span class="hidden sm:inline">Subir Foto</span>
+            </button>
+
+            <!-- Switch to Athlete View -->
+            <a href="atleta.html" target="_blank" class="flex items-center gap-2 bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold px-3 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 transition">
+                <i class="fa-solid fa-mobile-screen text-neutral-600 dark:text-neutral-400"></i>
+                <span class="hidden md:inline">Visão Aluno</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-[1700px] w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
+
+        <!-- KPI Metrics Summary Ribbon -->
+        <section class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+            <!-- Card 1: Total Treinos -->
+            <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs hover:border-neutral-400 dark:hover:border-neutral-700 transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Treinos</span>
+                    <i class="fa-solid fa-calendar-check text-neutral-400 dark:text-neutral-600 text-xs"></i>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metric-total-workouts" class="text-2xl font-black text-black dark:text-white">0</span>
+                    <span class="text-xs text-neutral-400">na semana</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Taxa de Adesão -->
+            <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs hover:border-neutral-400 dark:hover:border-neutral-700 transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Conclusão</span>
+                    <i class="fa-solid fa-chart-pie text-neutral-400 dark:text-neutral-600 text-xs"></i>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metric-completion-rate" class="text-2xl font-black text-black dark:text-white">0%</span>
+                    <span id="metric-completed-count" class="text-xs text-neutral-400">0 de 0 feitos</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Quilometragem -->
+            <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs hover:border-neutral-400 dark:hover:border-neutral-700 transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Volume Total</span>
+                    <i class="fa-solid fa-person-running text-neutral-400 dark:text-neutral-600 text-xs"></i>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metric-actual-km" class="text-2xl font-black text-black dark:text-white">0 km</span>
+                    <span id="metric-planned-km" class="text-xs text-neutral-400">/ 0 km plan</span>
+                </div>
+            </div>
+
+            <!-- Card 4: Esforço Médio (RPE) -->
+            <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs hover:border-neutral-400 dark:hover:border-neutral-700 transition">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Carga / Borg</span>
+                    <i class="fa-solid fa-heart-pulse text-neutral-400 dark:text-neutral-600 text-xs"></i>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metric-avg-rpe" class="text-2xl font-black text-black dark:text-white">-</span>
+                    <span class="text-xs text-neutral-400">Escala (1-10)</span>
+                </div>
+            </div>
+
+            <!-- Card 5: Total Atletas -->
+            <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs hover:border-neutral-400 dark:hover:border-neutral-700 transition col-span-2 sm:col-span-2 lg:col-span-1">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Atletas</span>
+                    <i class="fa-solid fa-users text-neutral-400 dark:text-neutral-600 text-xs"></i>
+                </div>
+                <div class="mt-2 flex items-baseline gap-2">
+                    <span id="metric-runners-count" class="text-2xl font-black text-black dark:text-white">0</span>
+                    <span class="text-xs text-neutral-400">no clube</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters & Search Bar -->
+        <section class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white dark:bg-neutral-950 p-3.5 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-xs transition">
+            <div class="flex flex-wrap items-center gap-2.5 flex-1">
+                <div class="relative flex-1 min-w-[200px] max-w-xs">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                    <input type="text" id="filter-search" oninput="filterWorkouts()" placeholder="Buscar atleta ou treino..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl pl-9 pr-3 py-2 text-xs text-neutral-900 dark:text-white placeholder-neutral-400 focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none transition">
+                </div>
+
+                <select id="filter-runner" onchange="filterWorkouts()" class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-800 dark:text-neutral-200 focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none transition">
+                    <option value="">Todos os Atletas</option>
+                </select>
+
+                <select id="filter-status" onchange="filterWorkouts()" class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-800 dark:text-neutral-200 focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none transition">
+                    <option value="">Todos os Status</option>
+                    <option value="completed">Concluídos</option>
+                    <option value="pending">Pendentes</option>
+                </select>
+
+                <select id="filter-type" onchange="filterWorkouts()" class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-800 dark:text-neutral-200 focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none transition">
+                    <option value="">Todos os Tipos</option>
+                    <option value="Intervalado">Intervalado / Tiros</option>
+                    <option value="Rodagem">Rodagem</option>
+                    <option value="Longo">Longo</option>
+                    <option value="Regenerativo">Regenerativo</option>
+                    <option value="Fartlek">Fartlek</option>
+                    <option value="Ritmo">Ritmo / Tempo Run</option>
+                </select>
+            </div>
+
+            <div class="flex items-center gap-2 self-end md:self-auto">
+                <button onclick="loadDashboardData()" title="Recarregar dados" class="p-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white text-xs transition">
+                    <i class="fa-solid fa-arrow-rotate-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Weekly Planner & Monitoring Grid (Segunda a Domingo) -->
+        <section class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
+                    <i class="fa-regular fa-calendar-days text-black dark:text-white"></i>
+                    <span>Grade Semanal de Monitoramento</span>
+                </h2>
+                <div class="flex items-center gap-4 text-[11px] text-neutral-500">
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-black dark:bg-white"></span> Concluído</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full border border-neutral-400 bg-neutral-200 dark:bg-neutral-800"></span> Pendente</span>
+                </div>
+            </div>
+
+            <!-- 7-Column Calendar Grid -->
+            <div id="calendar-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3 min-h-[500px]">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Seção de Elenco de Atletas -->
+        <section class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 lg:p-5 shadow-xs transition">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-address-book text-neutral-700 dark:text-neutral-300"></i>
+                        <span>Elenco de Atletas & Envio de Treino</span>
+                    </h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Copie a planilha semanal ou envie diretamente no WhatsApp com 1 clique.</p>
+                </div>
+                <button onclick="openNewRunnerModal()" class="text-xs font-bold bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800 transition">
+                    <i class="fa-solid fa-user-plus mr-1"></i> Cadastrar Aluno
+                </button>
+            </div>
+
+            <div id="runners-roster-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+                <!-- Roster cards injected via JS -->
+            </div>
+        </section>
+
+        <!-- Seção: Gestão de Maratonas & Provas do Clube -->
+        <section class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 lg:p-5 shadow-xs transition">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-flag-checkered text-neutral-700 dark:text-neutral-300"></i>
+                        <span>Gestão de Maratonas & Provas Alvo</span>
+                    </h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">As provas cadastradas aqui aparecem na aba "Corridas" do aplicativo dos alunos.</p>
+                </div>
+                <button onclick="openNewRaceModal()" class="text-xs font-bold bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus text-[10px]"></i>
+                    <span>Cadastrar Nova Prova</span>
+                </button>
+            </div>
+
+            <div id="coach-races-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Seção: Galeria de Fotos da Comunidade -->
+        <section class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 lg:p-5 shadow-xs transition">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-camera text-neutral-700 dark:text-neutral-300"></i>
+                        <span>Galeria de Fotos da Comunidade</span>
+                    </h3>
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">Fotos dos treinos, viagens e momentos do clube visíveis para todos os atletas.</p>
+                </div>
+                <button onclick="openNewPhotoModal()" class="text-xs font-bold bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus text-[10px]"></i>
+                    <span>Publicar Nova Foto</span>
+                </button>
+            </div>
+
+            <div id="coach-gallery-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================================================== -->
+    <!-- MODAL 1: PRESCREVER NOVO TREINO -->
+    <!-- ==================================================== -->
+    <div id="modal-new-workout" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl my-8 text-neutral-900 dark:text-white">
+            <div class="flex justify-between items-center pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-sm font-bold">
+                        <i class="fa-solid fa-stopwatch-20"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-black dark:text-white uppercase tracking-wider">Prescrever Novo Treino</h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Adicione um estímulo à programação do atleta</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-new-workout')" class="text-neutral-400 hover:text-black dark:hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="form-new-workout" onsubmit="handleCreateWorkout(event)" class="flex flex-col gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Selecionar Atleta *</label>
+                        <select id="nw-runner-id" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                            <!-- Injected dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Data do Treino *</label>
+                        <input type="date" id="nw-date" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Título do Treino *</label>
+                        <input type="text" id="nw-title" placeholder="Ex: Tiros de 1.000m na Pista" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Tipo de Estímulo *</label>
+                        <select id="nw-type" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                            <option value="Intervalado">Intervalado / Tiros</option>
+                            <option value="Rodagem">Rodagem Contínua</option>
+                            <option value="Longo">Longão</option>
+                            <option value="Regenerativo">Regenerativo Leve</option>
+                            <option value="Fartlek">Fartlek</option>
+                            <option value="Ritmo">Ritmo / Tempo Run</option>
+                            <option value="Fortalecimento">Fortalecimento / Funcional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Distância Estimada (km)</label>
+                        <input type="number" step="0.1" id="nw-distance" placeholder="Ex: 10.5" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Pace Alvo</label>
+                        <input type="text" id="nw-pace" placeholder="Ex: 4:35 - 4:40 /km" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Prescrição Detalhada *</label>
+                    <textarea id="nw-description" rows="3" required placeholder="Ex: 2km aquecimento Z2 + educativos + 6x 800m a 4:20 com 1min30s trote + 1.5km desaquecimento." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Orientação do Professor</label>
+                    <input type="text" id="nw-coach-notes" placeholder="Ex: Não exagere no primeiro tiro! Mantenha cadência regular." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-new-workout')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-semibold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition shadow-sm">Salvar Prescrição</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- MODAL 2: DETALHES & AVALIAÇÃO DO TREINO REALIZADO -->
+    <!-- ==================================================== -->
+    <div id="modal-view-workout" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-xl rounded-2xl p-6 shadow-2xl my-8 text-neutral-900 dark:text-white">
+            <div class="flex justify-between items-center pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-4">
+                <div class="flex items-center gap-3">
+                    <div id="vw-avatar" class="w-10 h-10 rounded-full bg-black dark:bg-white text-white dark:text-black font-bold text-sm flex items-center justify-center border border-neutral-700 dark:border-neutral-300">
+                        TC
+                    </div>
+                    <div>
+                        <h3 id="vw-runner-name" class="text-sm font-bold text-black dark:text-white">Nome do Atleta</h3>
+                        <p id="vw-date-type" class="text-xs text-neutral-500 dark:text-neutral-400">Data &middot; Tipo</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-view-workout')" class="text-neutral-400 hover:text-black dark:hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 mb-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 id="vw-title" class="text-sm font-bold text-black dark:text-white">Título do Treino</h4>
+                    <span id="vw-status-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full">Status</span>
+                </div>
+                <p id="vw-description" class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">Descrição do treino...</p>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400">
+                    <div>Distância Alvo: <strong id="vw-target-km" class="text-neutral-900 dark:text-white">0 km</strong></div>
+                    <div>Pace Alvo: <strong id="vw-target-pace" class="text-neutral-900 dark:text-white">-</strong></div>
+                </div>
+            </div>
+
+            <div id="vw-feedback-section" class="mb-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-stopwatch text-black dark:text-white"></i>
+                    <span>Execução Real do Atleta</span>
+                </h4>
+
+                <div class="grid grid-cols-4 gap-2 mb-3">
+                    <div class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-center">
+                        <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block">Distância</span>
+                        <strong id="vw-actual-km" class="text-sm font-black text-black dark:text-white">0 km</strong>
+                    </div>
+                    <div class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-center">
+                        <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block">Tempo</span>
+                        <strong id="vw-actual-time" class="text-sm font-black text-black dark:text-white">00:00</strong>
+                    </div>
+                    <div class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-center">
+                        <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block">Pace Médio</span>
+                        <strong id="vw-actual-pace" class="text-sm font-black text-black dark:text-white">0:00</strong>
+                    </div>
+                    <div class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-center">
+                        <span class="text-[10px] text-neutral-500 dark:text-neutral-400 block">Esforço (Borg)</span>
+                        <div class="flex items-center justify-center gap-1 mt-0.5">
+                            <span id="vw-rpe-badge" class="text-xs font-black px-2 py-0.5 rounded bg-black dark:bg-white text-white dark:text-black">0/10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-3 mb-2">
+                    <span class="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider block mb-1">Sensações do Aluno:</span>
+                    <p id="vw-athlete-notes" class="text-xs text-neutral-700 dark:text-neutral-200 italic">"Nenhum comentário registrado."</p>
+                </div>
+
+                <div id="vw-strava-container" class="hidden mb-3">
+                    <a id="vw-strava-link" href="#" target="_blank" class="inline-flex items-center gap-2 text-xs font-semibold text-black dark:text-white underline bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 rounded-lg transition">
+                        <i class="fa-brands fa-strava"></i>
+                        <span>Abrir Atividade no Strava</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4">
+                <label class="text-xs font-bold text-black dark:text-white uppercase tracking-wider block mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    <span>Retorno do Professor ao Aluno</span>
+                </label>
+                <textarea id="vw-coach-feedback-input" rows="2" placeholder="Deixe um comentário ou ajuste técnico para o aluno..." class="w-full bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-lg p-2.5 text-xs text-neutral-900 dark:text-white focus:border-black dark:focus:border-white outline-none resize-none mb-2"></textarea>
+                <div class="flex justify-between items-center">
+                    <button type="button" onclick="deleteCurrentWorkout()" class="text-xs text-neutral-500 hover:text-black dark:hover:text-white underline font-medium px-2 py-1">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Excluir Treino
+                    </button>
+                    <button type="button" onclick="saveCoachFeedback()" class="bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold text-xs px-4 py-2 rounded-lg transition shadow-xs">
+                        Salvar Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- MODAL 3: CADASTRAR NOVO ALUNO -->
+    <!-- ==================================================== -->
+    <div id="modal-new-runner" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-6 shadow-2xl text-neutral-900 dark:text-white">
+            <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-4">
+                <h3 class="text-base font-bold text-black dark:text-white flex items-center gap-2 uppercase tracking-wider">
+                    <i class="fa-solid fa-user-plus text-neutral-600 dark:text-neutral-400"></i>
+                    <span>Cadastrar Novo Atleta</span>
+                </h3>
+                <button onclick="closeModal('modal-new-runner')" class="text-neutral-400 hover:text-black dark:hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="form-new-runner" onsubmit="handleCreateRunner(event)" class="flex flex-col gap-3">
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Nome Completo *</label>
+                    <input type="text" id="nr-name" required placeholder="Ex: Felipe Silveira" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">WhatsApp / Telefone *</label>
+                    <input type="text" id="nr-phone" required placeholder="Ex: +55 51 99999-8888" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">E-mail</label>
+                    <input type="email" id="nr-email" placeholder="Ex: felipe@email.com" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Distância / Foco</label>
+                        <select id="nr-category" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                            <option value="5k">5 km</option>
+                            <option value="10k">10 km</option>
+                            <option value="21k" selected>21 km (Meia)</option>
+                            <option value="42k">42 km (Maratona)</option>
+                            <option value="Iniciante">Iniciante / Saúde</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Pace Base / Ref</label>
+                        <input type="text" id="nr-pace" placeholder="Ex: 5:00 /km" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Objetivo do Atleta</label>
+                    <input type="text" id="nr-goal" placeholder="Ex: Sub 1h45 na Meia de Porto Alegre" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-new-runner')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-semibold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition shadow-xs">Salvar Atleta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- MODAL 4: CADASTRAR PROVA / MARATONA (PELO TREINADOR) -->
+    <!-- ==================================================== -->
+    <div id="modal-new-race" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-6 shadow-2xl text-neutral-900 dark:text-white">
+            <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-4">
+                <h3 class="text-base font-bold text-black dark:text-white flex items-center gap-2 uppercase tracking-wider">
+                    <i class="fa-solid fa-flag-checkered text-neutral-600 dark:text-neutral-400"></i>
+                    <span>Cadastrar Próxima Prova</span>
+                </h3>
+                <button onclick="closeModal('modal-new-race')" class="text-neutral-400 hover:text-black dark:hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="form-new-race" onsubmit="handleCreateRace(event)" class="flex flex-col gap-3">
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Nome da Prova *</label>
+                    <input type="text" id="cr-title" required placeholder="Ex: Maratona de Curitiba 2026" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Data da Corrida *</label>
+                        <input type="date" id="cr-date" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Cidade / País</label>
+                        <input type="text" id="cr-city" placeholder="Ex: Curitiba, PR" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Distâncias (ex: 42k, 21k, 10k)</label>
+                    <input type="text" id="cr-distances" placeholder="42k, 21k, 10k" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">URL da Página Oficial da Prova</label>
+                    <input type="url" id="cr-link" placeholder="https://..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">URL da Imagem / Banner</label>
+                    <input type="url" id="cr-image" placeholder="https://..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Descrição / Destaque do Percurso</label>
+                    <textarea id="cr-description" rows="2" placeholder="Informações de altimetria, clima, ritmo alvo..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none resize-none"></textarea>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-new-race')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-semibold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition shadow-xs">Publicar Prova</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- MODAL 5: PUBLICAR FOTO (PELO TREINADOR) -->
+    <!-- ==================================================== -->
+    <div id="modal-new-photo" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-6 shadow-2xl text-neutral-900 dark:text-white">
+            <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-4">
+                <h3 class="text-base font-bold text-black dark:text-white flex items-center gap-2 uppercase tracking-wider">
+                    <i class="fa-solid fa-camera text-neutral-600 dark:text-neutral-400"></i>
+                    <span>Publicar Foto na Galeria</span>
+                </h3>
+                <button onclick="closeModal('modal-new-photo')" class="text-neutral-400 hover:text-black dark:hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="form-new-photo" onsubmit="handleCreatePhoto(event)" class="flex flex-col gap-3">
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Título do Momento *</label>
+                    <input type="text" id="cp-title" required placeholder="Ex: Longão de Sábado na Orla" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">Legenda / Subtítulo</label>
+                    <input type="text" id="cp-subtitle" placeholder="Ex: Pelotão 21k e 42k no amanhecer" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 block mb-1">URL da Imagem *</label>
+                    <input type="url" id="cp-url" required placeholder="https://..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                </div>
+
+                <!-- Presets rápidos -->
+                <div class="bg-neutral-50 dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800">
+                    <span class="text-[10px] font-bold text-neutral-400 block mb-1.5 uppercase">Fotos Rápidas de Exemplo:</span>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1200&q=80', 'Pelotão na Pista', 'Treino de velocidade matinal')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Pelotão</button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1200&q=80', 'Corrida ao Pôr do Sol', 'Treino na orla do lago')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Pôr do Sol</button>
+                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1486218119243-13883505764c?auto=format&fit=crop&w=1200&q=80', 'Treino de Tiros', 'Foco e cadência no tartã')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Pista Track</button>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-new-photo')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-semibold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition shadow-xs">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- JAVASCRIPT: LÓGICA DO DASHBOARD DO TREINADOR -->
+    <!-- ==================================================== -->
+    <script>
+        const API_BASE = '/api';
+
+        let currentWeekOffset = 0;
+        let currentWeekDays = [];
+        let allRunners = [];
+        let allWorkouts = [];
+        let allRaces = [];
+        let allPhotos = [];
+        let activeWorkout = null;
+
+        const DAY_NAMES = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initWeekDays();
+            loadDashboardData();
+            loadCoachRaces();
+            loadCoachGallery();
+        });
+
+        function initWeekDays() {
+            const now = new Date();
+            now.setDate(now.getDate() + (currentWeekOffset * 7));
+
+            const dayOfWeek = now.getDay();
+            const diffToMonday = (dayOfWeek + 6) % 7;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - diffToMonday);
+            monday.setHours(0, 0, 0, 0);
+
+            currentWeekDays = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                currentWeekDays.push(d.toISOString().split('T')[0]);
+            }
+
+            const startStr = formatDateBR(currentWeekDays[0]);
+            const endStr = formatDateBR(currentWeekDays[6]);
+            const weekLabel = document.getElementById('week-display-label');
+            if (currentWeekOffset === 0) {
+                weekLabel.innerHTML = `Semana Atual <span class="text-neutral-500 font-normal ml-1">(${startStr} a ${endStr})</span>`;
+            } else if (currentWeekOffset === -1) {
+                weekLabel.innerHTML = `Semana Passada <span class="text-neutral-400 font-normal ml-1">(${startStr} a ${endStr})</span>`;
+            } else if (currentWeekOffset === 1) {
+                weekLabel.innerHTML = `Próxima Semana <span class="text-neutral-500 font-normal ml-1">(${startStr} a ${endStr})</span>`;
+            } else {
+                weekLabel.innerHTML = `<span class="text-neutral-800 dark:text-neutral-200">${startStr} a ${endStr}</span>`;
+            }
+        }
+
+        function changeWeek(direction) {
+            currentWeekOffset += direction;
+            initWeekDays();
+            loadDashboardData();
+        }
+
+        async function loadDashboardData() {
+            try {
+                const runnersRes = await fetch(`${API_BASE}/runners`);
+                const runnersJson = await runnersRes.json();
+                if (runnersJson.success) {
+                    allRunners = runnersJson.data;
+                    populateRunnerDropdowns();
+                    renderRosterList();
+                }
+
+                const dateFrom = currentWeekDays[0];
+                const dateTo = currentWeekDays[6];
+                const weekRes = await fetch(`${API_BASE}/workouts/week?date_from=${dateFrom}&date_to=${dateTo}`);
+                const weekJson = await weekRes.json();
+
+                if (weekJson.success) {
+                    allWorkouts = weekJson.data;
+                    updateMetricsRibbon(weekJson.stats);
+                    filterWorkouts();
+                }
+            } catch (err) {
+                console.error('Erro ao carregar dados do dashboard:', err);
+            }
+        }
+
+        function updateMetricsRibbon(stats) {
+            document.getElementById('metric-total-workouts').innerText = stats.totalPlanned;
+            document.getElementById('metric-completion-rate').innerText = `${stats.completionRate}%`;
+            document.getElementById('metric-completed-count').innerText = `${stats.totalCompleted} de ${stats.totalPlanned} feitos`;
+            document.getElementById('metric-actual-km').innerText = `${stats.actualKm} km`;
+            document.getElementById('metric-planned-km').innerText = `/ ${stats.plannedKm} km plan`;
+            document.getElementById('metric-avg-rpe').innerText = stats.avgRpe > 0 ? stats.avgRpe : '-';
+            document.getElementById('metric-runners-count').innerText = allRunners.length;
+        }
+
+        function populateRunnerDropdowns() {
+            const filterSelect = document.getElementById('filter-runner');
+            const formSelect = document.getElementById('nw-runner-id');
+
+            const prevFilter = filterSelect.value;
+            filterSelect.innerHTML = '<option value="">Todos os Atletas</option>';
+            formSelect.innerHTML = '';
+
+            allRunners.forEach(r => {
+                filterSelect.innerHTML += `<option value="${r.id}">${r.name} (${r.category || 'Atleta'})</option>`;
+                formSelect.innerHTML += `<option value="${r.id}">${r.name} - Meta: ${r.goal || 'Geral'}</option>`;
+            });
+
+            filterSelect.value = prevFilter;
+        }
+
+        function filterWorkouts() {
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            const runnerId = document.getElementById('filter-runner').value;
+            const status = document.getElementById('filter-status').value;
+            const type = document.getElementById('filter-type').value;
+
+            const filtered = allWorkouts.filter(w => {
+                const matchSearch = !search || 
+                    w.title.toLowerCase().includes(search) || 
+                    w.runner_name.toLowerCase().includes(search) ||
+                    (w.description && w.description.toLowerCase().includes(search));
+                
+                const matchRunner = !runnerId || w.runner_id === runnerId;
+                const matchStatus = !status || w.status === status;
+                const matchType = !type || w.workout_type === type;
+
+                return matchSearch && matchRunner && matchStatus && matchType;
+            });
+
+            renderCalendarGrid(filtered);
+        }
+
+        function renderCalendarGrid(workouts) {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            const todayISO = new Date().toISOString().split('T')[0];
+
+            currentWeekDays.forEach((dayIso, index) => {
+                const dayWorkouts = workouts.filter(w => w.date === dayIso);
+                const isToday = dayIso === todayISO;
+                const dayName = DAY_NAMES[index];
+                const dayDateFormatted = formatDateBR(dayIso);
+
+                let columnHtml = `
+                    <div class="bg-white dark:bg-neutral-950 border ${isToday ? 'border-black dark:border-white ring-1 ring-black dark:ring-white' : 'border-neutral-200 dark:border-neutral-800'} rounded-2xl p-3 flex flex-col min-h-[420px] shadow-xs transition">
+                        <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-neutral-100 dark:border-neutral-800">
+                            <div>
+                                <span class="text-xs font-black uppercase tracking-wider ${isToday ? 'text-black dark:text-white' : 'text-neutral-700 dark:text-neutral-300'}">${dayName}</span>
+                                <span class="text-[11px] text-neutral-400 dark:text-neutral-500 block font-medium">${dayDateFormatted}</span>
+                            </div>
+                            <button onclick="openNewWorkoutModalForDate('${dayIso}')" title="Adicionar treino para este dia" class="w-6 h-6 rounded-lg bg-neutral-100 hover:bg-black dark:bg-neutral-800 dark:hover:bg-white text-neutral-600 dark:text-neutral-300 hover:text-white dark:hover:text-black flex items-center justify-center text-xs transition">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex-1 flex flex-col gap-2.5">
+                `;
+
+                if (dayWorkouts.length === 0) {
+                    columnHtml += `
+                        <div class="flex-1 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-600 text-xs py-8 border-2 border-dashed border-neutral-100 dark:border-neutral-900 rounded-xl">
+                            <i class="fa-solid fa-shoe-prints text-neutral-300 dark:text-neutral-800 text-lg mb-1.5 opacity-60"></i>
+                            <span>Sem treinos</span>
+                        </div>
+                    `;
+                } else {
+                    dayWorkouts.forEach(w => {
+                        const isCompleted = w.status === 'completed';
+                        const fb = w.feedback;
+                        const typeBadgeClasses = getTypeBadgeClasses(w.workout_type);
+
+                        columnHtml += `
+                            <div onclick="openWorkoutDetails('${w.id}')" class="group ${isCompleted ? 'bg-neutral-50 dark:bg-neutral-900/90 border-neutral-300 dark:border-neutral-700' : 'bg-white dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white'} border rounded-xl p-3 cursor-pointer shadow-xs transition-all hover:translate-y-[-1px] hover:shadow-sm">
+                                <div class="flex items-center justify-between gap-1.5 mb-1.5">
+                                    <div class="flex items-center gap-1.5 min-w-0">
+                                        <div class="w-6 h-6 rounded-full bg-black dark:bg-white text-white dark:text-black text-[10px] font-black flex items-center justify-center shrink-0">
+                                            ${w.runner_avatar || 'TC'}
+                                        </div>
+                                        <span class="text-xs font-bold text-neutral-900 dark:text-neutral-100 truncate">${w.runner_name}</span>
+                                    </div>
+                                    <span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${isCompleted ? 'bg-black dark:bg-white text-white dark:text-black' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-700'} shrink-0">
+                                        ${isCompleted ? '✓ Feito' : 'Pendente'}
+                                    </span>
+                                </div>
+
+                                <div class="mb-2">
+                                    <span class="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${typeBadgeClasses} inline-block mb-1">
+                                        ${w.workout_type}
+                                    </span>
+                                    <h4 class="text-xs font-bold text-neutral-900 dark:text-neutral-100 group-hover:underline transition truncate">${w.title}</h4>
+                                </div>
+
+                                <div class="pt-2 border-t border-neutral-100 dark:border-neutral-800 flex justify-between items-center text-[11px] text-neutral-500 dark:text-neutral-400">
+                                    <span>${w.target_distance_km ? w.target_distance_km + 'km' : 'Livre'} &middot; <strong class="text-neutral-900 dark:text-neutral-200 font-semibold">${w.target_pace || '-'}</strong></span>
+                                    
+                                    ${isCompleted && fb ? `
+                                        <div class="flex items-center gap-1 text-[10px] font-bold text-black dark:text-white bg-neutral-200 dark:bg-neutral-800 px-1.5 py-0.5 rounded">
+                                            <span>${fb.actual_distance_km}k</span>
+                                            <span class="text-neutral-400">&middot;</span>
+                                            <span title="Esforço Borg ${fb.perceived_exertion}/10">RPE ${fb.perceived_exertion}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+
+                                ${fb && fb.coach_feedback ? `
+                                    <div class="mt-2 text-[10px] text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800/60 border border-neutral-200 dark:border-neutral-700 px-2 py-1 rounded truncate font-medium">
+                                        <i class="fa-solid fa-check-double mr-1"></i> Comentado
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                }
+
+                columnHtml += `
+                        </div>
+                    </div>
+                `;
+
+                grid.innerHTML += columnHtml;
+            });
+        }
+
+        function renderRosterList() {
+            const container = document.getElementById('runners-roster-list');
+            container.innerHTML = '';
+
+            allRunners.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-3 flex flex-col justify-between hover:bg-white dark:hover:bg-neutral-850 transition">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <div class="w-8 h-8 rounded-full bg-black dark:bg-white text-white dark:text-black font-black text-xs flex items-center justify-center">
+                                ${r.avatar || 'TC'}
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-neutral-900 dark:text-white truncate">${r.name}</h4>
+                                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 truncate block font-medium">${r.goal || 'Geral'}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-1">
+                            <span>Pace: <strong class="text-neutral-900 dark:text-neutral-200">${r.base_pace || '-'}</strong></span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="copyWeeklySchedule('${r.id}')" title="Copiar planilha semanal para WhatsApp" class="p-1.5 bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-lg transition text-xs shadow-xs">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button onclick="sendWeeklyWhatsApp('${r.id}')" title="Enviar no WhatsApp" class="p-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-80 rounded-lg transition text-xs shadow-xs">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ====================================================
+        // GESTÃO DE PROVAS & MARATONAS (PELO TREINADOR)
+        // ====================================================
+        async function loadCoachRaces() {
+            try {
+                const res = await fetch(`${API_BASE}/races`);
+                const json = await res.json();
+                if (json.success) {
+                    allRaces = json.data;
+                    renderCoachRaces();
+                }
+            } catch (err) {
+                console.error('Erro ao carregar provas:', err);
+            }
+        }
+
+        function renderCoachRaces() {
+            const container = document.getElementById('coach-races-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (allRaces.length === 0) {
+                container.innerHTML = `<p class="text-xs text-neutral-500 py-4 col-span-full">Nenhuma prova cadastrada no momento.</p>`;
+                return;
+            }
+
+            allRaces.forEach(race => {
+                const raceUrl = race.link || race.url || '#';
+                const hasUrl = race.link || race.url;
+
+                container.innerHTML += `
+                    <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between shadow-xs relative">
+                        <div class="h-28 w-full bg-neutral-800 relative overflow-hidden">
+                            <img src="${race.image_url}" alt="${race.title}" class="w-full h-full object-cover filter grayscale opacity-80">
+                            <div class="absolute top-2 left-2">
+                                <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-black text-white">${race.badge || 'Oficial'}</span>
+                            </div>
+                            <button onclick="deleteRace('${race.id}')" title="Excluir prova" class="absolute top-2 right-2 w-6 h-6 rounded bg-black/80 hover:bg-rose-600 text-white flex items-center justify-center text-xs transition z-10">
+                                <i class="fa-solid fa-trash-can text-[10px]"></i>
+                            </button>
+                        </div>
+                        <div class="p-3 flex flex-col justify-between flex-1">
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-black dark:text-white truncate mb-1">${race.title}</h4>
+                                <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mb-2">${race.city} &middot; ${formatDateBR(race.date)}</p>
+                                <div class="flex gap-1 flex-wrap mb-3">
+                                    ${(race.distances || []).map(d => `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white dark:bg-black border border-neutral-300 dark:border-neutral-700">${d}</span>`).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+                                ${hasUrl ? `
+                                    <a href="${raceUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                                        <span>Página Oficial</span>
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </a>
+                                ` : `
+                                    <span class="text-[11px] text-neutral-400 italic">Sem link cadastrado</span>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function deleteRace(id) {
+            if (!confirm('Deseja realmente remover esta prova do calendário do clube?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/races/${id}`, { method: 'DELETE' });
+                const json = await res.json();
+                if (json.success) {
+                    loadCoachRaces();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao excluir prova.');
+            }
+        }
+
+        async function handleCreateRace(e) {
+            e.preventDefault();
+            const title = document.getElementById('cr-title').value;
+            const date = document.getElementById('cr-date').value;
+            const city = document.getElementById('cr-city').value;
+            const distancesStr = document.getElementById('cr-distances').value;
+            const distances = distancesStr ? distancesStr.split(',').map(s => s.trim()) : ['10k'];
+            const link = document.getElementById('cr-link').value;
+            const image_url = document.getElementById('cr-image').value || 'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80';
+            const description = document.getElementById('cr-description').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/races`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, date, city, distances, link, image_url, description })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    alert('Prova publicada com sucesso no aplicativo dos alunos!');
+                    closeModal('modal-new-race');
+                    document.getElementById('form-new-race').reset();
+                    loadCoachRaces();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao cadastrar prova.');
+            }
+        }
+
+        // ====================================================
+        // GESTÃO DA GALERIA DE FOTOS (PELO TREINADOR)
+        // ====================================================
+        async function loadCoachGallery() {
+            try {
+                const res = await fetch(`${API_BASE}/gallery`);
+                const json = await res.json();
+                if (json.success) {
+                    allPhotos = json.data;
+                    renderCoachGallery();
+                }
+            } catch (err) {
+                console.error('Erro ao carregar galeria:', err);
+            }
+        }
+
+        function renderCoachGallery() {
+            const container = document.getElementById('coach-gallery-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (allPhotos.length === 0) {
+                container.innerHTML = `<p class="text-xs text-neutral-500 py-4 col-span-full">Nenhuma foto cadastrada na galeria.</p>`;
+                return;
+            }
+
+            allPhotos.forEach(photo => {
+                container.innerHTML += `
+                    <div class="group relative aspect-square bg-neutral-900 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800 shadow-xs">
+                        <img src="${photo.image_url}" alt="${photo.title}" class="w-full h-full object-cover filter grayscale group-hover:scale-105 transition">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 p-2 flex flex-col justify-between">
+                            <button onclick="deletePhoto('${photo.id}')" title="Excluir foto" class="self-end w-6 h-6 rounded bg-black/80 hover:bg-rose-600 text-white flex items-center justify-center text-[10px] transition">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                            <span class="text-[10px] font-bold text-white truncate">${photo.title}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function deletePhoto(id) {
+            if (!confirm('Deseja excluir esta foto da galeria?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/gallery/${id}`, { method: 'DELETE' });
+                const json = await res.json();
+                if (json.success) {
+                    loadCoachGallery();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao excluir foto.');
+            }
+        }
+
+        function selectPresetPhoto(url, title, subtitle) {
+            document.getElementById('cp-url').value = url;
+            document.getElementById('cp-title').value = title;
+            document.getElementById('cp-subtitle').value = subtitle;
+        }
+
+        async function handleCreatePhoto(e) {
+            e.preventDefault();
+            const title = document.getElementById('cp-title').value;
+            const subtitle = document.getElementById('cp-subtitle').value;
+            const image_url = document.getElementById('cp-url').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/gallery`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, subtitle, image_url })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    alert('Foto publicada com sucesso na galeria do clube!');
+                    closeModal('modal-new-photo');
+                    document.getElementById('form-new-photo').reset();
+                    loadCoachGallery();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao salvar foto.');
+            }
+        }
+
+        // ====================================================
+        // MODAIS & ACIONADORES
+        // ====================================================
+        function openNewWorkoutModalForDate(dateIso) {
+            document.getElementById('nw-date').value = dateIso;
+            openModal('modal-new-workout');
+        }
+
+        function openNewWorkoutModal() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('nw-date').value = today;
+            openModal('modal-new-workout');
+        }
+
+        function openNewRunnerModal() {
+            openModal('modal-new-runner');
+        }
+
+        function openNewRaceModal() {
+            openModal('modal-new-race');
+        }
+
+        function openNewPhotoModal() {
+            openModal('modal-new-photo');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        async function handleCreateWorkout(e) {
+            e.preventDefault();
+            const runner_id = document.getElementById('nw-runner-id').value;
+            const date = document.getElementById('nw-date').value;
+            const title = document.getElementById('nw-title').value;
+            const workout_type = document.getElementById('nw-type').value;
+            const target_distance_km = document.getElementById('nw-distance').value;
+            const target_pace = document.getElementById('nw-pace').value;
+            const description = document.getElementById('nw-description').value;
+            const coach_notes = document.getElementById('nw-coach-notes').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/workouts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        runner_id,
+                        date,
+                        title,
+                        workout_type,
+                        target_distance_km,
+                        target_pace,
+                        description,
+                        coach_notes
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    closeModal('modal-new-workout');
+                    document.getElementById('form-new-workout').reset();
+                    loadDashboardData();
+                } else {
+                    alert('Erro ao prescrever treino: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao salvar treino.');
+            }
+        }
+
+        async function handleCreateRunner(e) {
+            e.preventDefault();
+            const name = document.getElementById('nr-name').value;
+            const phone = document.getElementById('nr-phone').value;
+            const email = document.getElementById('nr-email').value;
+            const category = document.getElementById('nr-category').value;
+            const base_pace = document.getElementById('nr-pace').value;
+            const goal = document.getElementById('nr-goal').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/runners`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, phone, email, category, base_pace, goal })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    closeModal('modal-new-runner');
+                    document.getElementById('form-new-runner').reset();
+                    loadDashboardData();
+                } else {
+                    alert('Erro ao cadastrar atleta: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao salvar atleta.');
+            }
+        }
+
+        function openWorkoutDetails(workoutId) {
+            const workout = allWorkouts.find(w => w.id === workoutId);
+            if (!workout) return;
+            activeWorkout = workout;
+
+            document.getElementById('vw-avatar').innerText = workout.runner_avatar || 'TC';
+            document.getElementById('vw-runner-name').innerText = workout.runner_name;
+            document.getElementById('vw-date-type').innerText = `${formatDateBR(workout.date)} &middot; ${workout.workout_type}`;
+
+            document.getElementById('vw-title').innerText = workout.title;
+            document.getElementById('vw-description').innerText = workout.description || 'Sem descrição cadastrada.';
+            document.getElementById('vw-target-km').innerText = workout.target_distance_km ? `${workout.target_distance_km} km` : 'Livre';
+            document.getElementById('vw-target-pace').innerText = workout.target_pace || 'Livre';
+
+            const isCompleted = workout.status === 'completed';
+            const statusBadge = document.getElementById('vw-status-badge');
+            if (isCompleted) {
+                statusBadge.className = 'text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded bg-black dark:bg-white text-white dark:text-black';
+                statusBadge.innerText = '✓ Concluído';
+            } else {
+                statusBadge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400';
+                statusBadge.innerText = 'Pendente';
+            }
+
+            const fb = workout.feedback;
+            if (fb) {
+                document.getElementById('vw-feedback-section').classList.remove('opacity-40');
+                document.getElementById('vw-actual-km').innerText = `${fb.actual_distance_km || 0} km`;
+                document.getElementById('vw-actual-time').innerText = fb.actual_duration || '-';
+                document.getElementById('vw-actual-pace').innerText = fb.actual_pace || '-';
+                document.getElementById('vw-rpe-badge').innerText = `${fb.perceived_exertion || '-'}/10`;
+                document.getElementById('vw-athlete-notes').innerText = fb.athlete_notes ? `"${fb.athlete_notes}"` : 'Sem comentários informados.';
+                
+                if (fb.strava_url) {
+                    document.getElementById('vw-strava-container').classList.remove('hidden');
+                    document.getElementById('vw-strava-link').href = fb.strava_url;
+                } else {
+                    document.getElementById('vw-strava-container').classList.add('hidden');
+                }
+
+                document.getElementById('vw-coach-feedback-input').value = fb.coach_feedback || '';
+            } else {
+                document.getElementById('vw-feedback-section').classList.add('opacity-40');
+                document.getElementById('vw-actual-km').innerText = '0 km';
+                document.getElementById('vw-actual-time').innerText = '--:--';
+                document.getElementById('vw-actual-pace').innerText = '-';
+                document.getElementById('vw-rpe-badge').innerText = '-/10';
+                document.getElementById('vw-athlete-notes').innerText = 'Treino ainda não realizado pelo atleta.';
+                document.getElementById('vw-strava-container').classList.add('hidden');
+                document.getElementById('vw-coach-feedback-input').value = '';
+            }
+
+            openModal('modal-view-workout');
+        }
+
+        async function saveCoachFeedback() {
+            if (!activeWorkout) return;
+            const coachFeedback = document.getElementById('vw-coach-feedback-input').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/workouts/${activeWorkout.id}/coach-feedback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ coach_feedback: coachFeedback })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert('Feedback salvo com sucesso!');
+                    closeModal('modal-view-workout');
+                    loadDashboardData();
+                } else {
+                    alert('Erro ao salvar feedback: ' + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao salvar feedback.');
+            }
+        }
+
+        async function deleteCurrentWorkout() {
+            if (!activeWorkout) return;
+            if (!confirm(`Deseja realmente excluir o treino "${activeWorkout.title}"?`)) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/workouts/${activeWorkout.id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    closeModal('modal-view-workout');
+                    loadDashboardData();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao excluir treino.');
+            }
+        }
+
+        function generateWeeklyText(runnerId) {
+            const runner = allRunners.find(r => r.id === runnerId);
+            if (!runner) return '';
+
+            const workouts = allWorkouts.filter(w => w.runner_id === runnerId);
+            const startStr = formatDateBR(currentWeekDays[0]);
+            const endStr = formatDateBR(currentWeekDays[6]);
+
+            let text = `🏃‍♂️ *TROPICAL CLUB* 🏃‍♂️\n`;
+            text += `Planilha Semanal: *${startStr} a ${endStr}*\n`;
+            text += `Atleta: *${runner.name}* (Meta: ${runner.goal || 'Geral'})\n\n`;
+
+            if (workouts.length === 0) {
+                text += `Sem treinos programados para esta semana.\n`;
+            } else {
+                workouts.sort((a, b) => a.date.localeCompare(b.date));
+                workouts.forEach(w => {
+                    const d = new Date(w.date + 'T00:00:00');
+                    const dayLabel = DAY_NAMES[(d.getDay() + 6) % 7];
+                    text += `📌 *${dayLabel} (${formatDateBR(w.date)})* - ${w.workout_type}\n`;
+                    text += `🎯 *${w.title}*\n`;
+                    if (w.target_distance_km) text += `📏 Distância: ${w.target_distance_km} km\n`;
+                    if (w.target_pace) text += `⏱ Pace Alvo: ${w.target_pace}\n`;
+                    text += `📝 ${w.description}\n`;
+                    if (w.coach_notes) text += `💡 Dica: ${w.coach_notes}\n`;
+                    text += `\n`;
+                });
+            }
+
+            text += `Bons treinos! Não esqueça de registrar o feedback no app após concluir! 🚀`;
+            return text;
+        }
+
+        function copyWeeklySchedule(runnerId) {
+            const text = generateWeeklyText(runnerId);
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Planilha semanal copiada para a área de transferência! Pode colar no WhatsApp do atleta.');
+            }).catch(() => {
+                alert('Erro ao copiar automaticamente.');
+            });
+        }
+
+        function sendWeeklyWhatsApp(runnerId) {
+            const runner = allRunners.find(r => r.id === runnerId);
+            if (!runner) return;
+            const text = encodeURIComponent(generateWeeklyText(runnerId));
+            const phone = (runner.phone || '').replace(/\D/g, '');
+            const url = phone ? `https://wa.me/${phone}?text=${text}` : `https://wa.me/?text=${text}`;
+            window.open(url, '_blank');
+        }
+
+        function formatDateBR(isoStr) {
+            if (!isoStr) return '';
+            const parts = isoStr.split('-');
+            return `${parts[2]}/${parts[1]}`;
+        }
+
+        function getTypeBadgeClasses(type) {
+            return 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700';
+        }
+    </script>
+</body>
+</html>
+
+```

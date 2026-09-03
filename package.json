@@ -1,0 +1,23 @@
+{
+  "name": "tropical-club-app",
+  "version": "1.0.0",
+  "description": "App de gestão e monitoramento de treinos de corrida para Tropical Club",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "keywords": [
+    "running",
+    "tropical-club",
+    "training",
+    "coach",
+    "athlete"
+  ],
+  "author": "Tropical Club",
+  "license": "ISC"
+}

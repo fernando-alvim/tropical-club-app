@@ -1,0 +1,379 @@
+{
+  "runners": [
+    {
+      "id": "runner-1",
+      "name": "Camila Duarte",
+      "email": "camila.duarte@email.com",
+      "phone": "+55 51 98822-1101",
+      "avatar": "CD",
+      "goal": "Meia Maratona 21k (Sub 1h50)",
+      "base_pace": "5:15/km",
+      "category": "21k",
+      "active": true
+    },
+    {
+      "id": "runner-2",
+      "name": "Rodrigo Mendonça",
+      "email": "rodrigo.m@email.com",
+      "phone": "+55 51 99133-4422",
+      "avatar": "RM",
+      "goal": "10k Sub 45 min",
+      "base_pace": "4:25/km",
+      "category": "10k",
+      "active": true
+    },
+    {
+      "id": "runner-3",
+      "name": "Mateo Fernández",
+      "email": "mateo.running@email.com",
+      "phone": "+54 9 11 4455-6677",
+      "avatar": "MF",
+      "goal": "Maratona 42k Buenos Aires",
+      "base_pace": "4:50/km",
+      "category": "42k",
+      "active": true
+    },
+    {
+      "id": "runner-4",
+      "name": "Luciana Rossi",
+      "email": "lu.rossi@email.com",
+      "phone": "+55 51 99744-8833",
+      "avatar": "LR",
+      "goal": "Estreia 5k sem caminhar",
+      "base_pace": "6:30/km",
+      "category": "5k",
+      "active": true
+    },
+    {
+      "id": "runner-5",
+      "name": "Juliana Castro",
+      "email": "ju.castro@email.com",
+      "phone": "+55 51 98211-5566",
+      "avatar": "JC",
+      "goal": "10k Ritmo Forte",
+      "base_pace": "4:40/km",
+      "category": "10k",
+      "active": true
+    },
+    {
+      "id": "runner-1788451723973",
+      "active": true,
+      "avatar": "FA",
+      "name": "Fernando Alvim",
+      "email": "fernandoalvim5@icloud.com",
+      "phone": "+54 9 2901 41 0382",
+      "goal": "1h45 na meia maratona de Buenos Aires",
+      "base_pace": "5:10 /km",
+      "category": "21k"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "w-101",
+      "runner_id": "runner-1",
+      "date": "2026-08-31",
+      "title": "Rodagem Regenerativa Leve",
+      "workout_type": "Regenerativo",
+      "target_distance_km": 6,
+      "target_pace": "5:45 - 6:00 /km",
+      "description": "Aquecimento articular + 6km em ritmo Z2 bem confortável. Foco em soltar a musculatura e respiração nasal controlada.",
+      "coach_notes": "Mantenha a frequência cardíaca baixa. Não force o ritmo hoje!",
+      "status": "completed"
+    },
+    {
+      "id": "w-102",
+      "runner_id": "runner-1",
+      "date": "2026-09-02",
+      "title": "Tiros de 1.000m (Pista/Asfalto)",
+      "workout_type": "Intervalado",
+      "target_distance_km": 9,
+      "target_pace": "4:40 - 4:45 /km",
+      "description": "Aquecimento 2km trote leve + Educativos + 5x 1000m a 4:40 com intervalo de 2min caminhando/trote leve + 1.5km desaquecimento.",
+      "coach_notes": "Atenção à cadência de passadas nas repetições 4 e 5. Manter regularidade.",
+      "status": "completed"
+    },
+    {
+      "id": "w-103",
+      "runner_id": "runner-1",
+      "date": "2026-09-04",
+      "title": "Fartlek Progressivo",
+      "workout_type": "Fartlek",
+      "target_distance_km": 7,
+      "target_pace": "5:10 /km médio",
+      "description": "1km Z2 + alternar 2min ritmo de prova (4:55) por 1min moderado (5:30) até completar 6km + 1km solto.",
+      "coach_notes": "Treino para trabalhar transição de marcha e potência aeróbica.",
+      "status": "completed"
+    },
+    {
+      "id": "w-104",
+      "runner_id": "runner-1",
+      "date": "2026-09-05",
+      "title": "Longão de Fim de Semana",
+      "workout_type": "Longo",
+      "target_distance_km": 16,
+      "target_pace": "5:25 - 5:35 /km",
+      "description": "16km contínuos. Levar hidratação e gel de carboidrato no km 7 e km 12. Os últimos 3km podem ser feitos no ritmo de prova (5:15).",
+      "coach_notes": "Simulação oficial de hidratação para a Meia Maratona!",
+      "status": "pending"
+    },
+    {
+      "id": "w-201",
+      "runner_id": "runner-2",
+      "date": "2026-09-01",
+      "title": "Tiros Curtos 400m",
+      "workout_type": "Intervalado",
+      "target_distance_km": 8.5,
+      "target_pace": "3:55 - 4:05 /km",
+      "description": "2km aquecimento + 8x 400m no talo a 3:55 com 1min15s descanso parado + 1.5km soltando.",
+      "coach_notes": "Trabalho de VO2max puro. Postura alta e braços firmes.",
+      "status": "completed"
+    },
+    {
+      "id": "w-202",
+      "runner_id": "runner-2",
+      "date": "2026-09-03",
+      "title": "Tempo Run (Ritmo Sustentado)",
+      "workout_type": "Ritmo",
+      "target_distance_km": 8,
+      "target_pace": "4:20 /km",
+      "description": "1.5km aquecimento + 5km cravados a 4:20/km sem oscilar + 1.5km desaquecimento.",
+      "coach_notes": "Limiar anaeróbico. Concentração total no cronômetro.",
+      "status": "pending"
+    },
+    {
+      "id": "w-203",
+      "runner_id": "runner-2",
+      "date": "2026-09-06",
+      "title": "Rodagem Longa com Subidas",
+      "workout_type": "Longo",
+      "target_distance_km": 13,
+      "target_pace": "4:45 /km",
+      "description": "13km em percurso ondulado. Subir mantendo esforço constante e aproveitar a descida para soltar o giro.",
+      "coach_notes": "Fortalecimento específico de quadríceps e panturrilha na subida.",
+      "status": "pending"
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "fb-1",
+      "workout_id": "w-101",
+      "runner_id": "runner-1",
+      "completed_at": "2026-08-31T19:30:00Z",
+      "actual_distance_km": 6.2,
+      "actual_duration": "36:10",
+      "actual_pace": "5:50 /km",
+      "perceived_exertion": 4,
+      "athlete_notes": "Treino bem gostoso após um dia cansativo de trabalho. Pernas estavam um pouco pesadas no início mas depois soltou bem.",
+      "strava_url": "https://strava.com/activities/123456789",
+      "coach_feedback": "Excelente controle de ritmo, Camila! Recuperação ativa perfeita."
+    },
+    {
+      "id": "fb-2",
+      "workout_id": "w-102",
+      "runner_id": "runner-1",
+      "completed_at": "2026-09-02T07:15:00Z",
+      "actual_distance_km": 9.15,
+      "actual_duration": "44:20",
+      "actual_pace": "4:42 /km",
+      "perceived_exertion": 8,
+      "athlete_notes": "Tiros saíram fortes! O 4º tiro foi o mais duro psicologicamente, mas fechei o 5º a 4:38. Me senti forte!",
+      "strava_url": "https://strava.com/activities/987654321",
+      "coach_feedback": "Orgulho demais desse treino! Você cravou todos os mil metros abaixo do teto. Pode descansar bem na quinta!"
+    },
+    {
+      "id": "fb-3",
+      "workout_id": "w-201",
+      "runner_id": "runner-2",
+      "completed_at": "2026-09-01T06:40:00Z",
+      "actual_distance_km": 8.6,
+      "actual_duration": "38:00",
+      "actual_pace": "3:58 /km",
+      "perceived_exertion": 9,
+      "athlete_notes": "Treino insano na pista do parque. Saí com gosto de ferro na boca mas bati todas as parciais entre 1:33 e 1:36 nos 400m.",
+      "strava_url": "",
+      "coach_feedback": "Animal, Rodrigo! É esse estímulo que vai fazer seu 10k despencar para sub 45."
+    },
+    {
+      "id": "fb-1788450064416",
+      "completed_at": "2026-09-03T15:41:04.416Z",
+      "coach_feedback": "",
+      "workout_id": "w-103",
+      "actual_distance_km": 85,
+      "actual_duration": "54",
+      "actual_pace": "4",
+      "perceived_exertion": 8,
+      "athlete_notes": "jfuykukuykumfmmtu  yenryngnrynryrnyt",
+      "strava_url": ""
+    }
+  ],
+  "glossary": [
+    {
+      "id": "gloss-intervalado",
+      "type": "Intervalado / Tiros",
+      "tag": "Velocidade & VO2max",
+      "summary": "Repetições de alta intensidade intercaladas por intervalos de descanso controlado.",
+      "description": "O treino intervalado é o principal estímulo para elevar o VO2max e a capacidade de suportar ritmos rápidos. As repetições podem ser curtas (200m a 400m para velocidade pura) ou longas (800m a 2.000m para potência aeróbica).",
+      "how_to_do": "Mantenha todas as repetições no mesmo ritmo. O erro clássico é sair em ritmo de sprint no primeiro tiro e não conseguir sustentar até o final. Respire de forma ritmada e concentre-se na postura ereta.",
+      "heart_rate_zone": "Z4 e Z5 (Limiar / Anaeróbica - 88% a 100% FCmax)",
+      "borg_scale": "8 a 9 (Muito Intenso / Quase Máximo)",
+      "recovery": "Intervalo ativo (trote leve) ou passivo (caminhada/parado) conforme indicado pelo professor.",
+      "icon": "fa-stopwatch-20"
+    },
+    {
+      "id": "gloss-fartlek",
+      "type": "Fartlek",
+      "tag": "Jogo de Velocidade",
+      "summary": "Corrida contínua com variação livre e fluida de ritmos sem paradas.",
+      "description": "Criado na Suécia (onde \"Fart\" significa velocidade e \"lek\" brincadeira), o Fartlek é uma corrida dinâmica que alterna tiros rápidos com recuperações trotando. Pode ser baseado em tempo (ex: 3min forte x 1min30s leve) ou terreno (acelerar nas subidas, soltar nas retas).",
+      "how_to_do": "Não há descanso parado! O segredo é conseguir recuperar o fôlego mesmo mantendo o trote leve durante a fase de recuperação ativa. Excelente para simular variações de ritmo em provas.",
+      "heart_rate_zone": "Oscila continuamente entre Z3 (Moderada) e Z4 (Forte)",
+      "borg_scale": "6 a 8 (Moderado a Intenso)",
+      "recovery": "Trote moderado/leve entre os blocos acelerados.",
+      "icon": "fa-shuffle"
+    },
+    {
+      "id": "gloss-rodagem",
+      "type": "Rodagem Leve (Easy Run)",
+      "tag": "Base Aeróbica",
+      "summary": "A espinha dorsal do corredor: corrida contínua e confortável em Zona 2.",
+      "description": "Representa de 70% a 80% de todo o volume semanal de um corredor de elite ou amador. Estimula a capilarização muscular, densidade mitocondrial e fortalece tendões e ligamentos sem sobrecarga articular excessiva.",
+      "how_to_do": "Regra de ouro do \"Conversational Pace\": você deve ser capaz de falar frases completas sem perder o ar. Se a respiração ficar pesada demais, reduza a velocidade sem medo.",
+      "heart_rate_zone": "Z2 (Aeróbica Leve - 65% a 75% FCmax)",
+      "borg_scale": "3 a 5 (Leve a Confortável)",
+      "recovery": "Treino de baixo desgaste metabólico.",
+      "icon": "fa-person-running"
+    },
+    {
+      "id": "gloss-regenerativo",
+      "type": "Regenerativo (Recovery Run)",
+      "tag": "Recuperação Ativa",
+      "summary": "Corrida curta em ritmo ultraconfortável para acelerar a drenagem de metabólitos.",
+      "description": "Realizado tipicamente no dia seguinte a um treino extenuante (como tiros ou o longão de fim de semana). Seu papel não é treinar condicionamento físico, mas aumentar a circulação sanguínea para acelerar a regeneração celular.",
+      "how_to_do": "Esqueça o relógio e o pace! Corra no ritmo mais fácil possível, com passadas curtas, relaxando ombros, mandíbula e trapézio. Duração recomendada entre 30 e 45 minutos.",
+      "heart_rate_zone": "Z1 a Z2 Baixa (<65% FCmax)",
+      "borg_scale": "2 a 4 (Muito Leve)",
+      "recovery": "Favorece o sono e a restauração das reservas de glicogênio.",
+      "icon": "fa-heart-pulse"
+    },
+    {
+      "id": "gloss-longo",
+      "type": "Longão (Long Run)",
+      "tag": "Resistência & Gordura como Combustível",
+      "summary": "O treino de maior volume da semana, simulando o desafio mental e físico de provas.",
+      "description": "Essencial para quem treina para 10k, 21k ou 42k. Ensina o organismo a metabolizar gorduras com maior eficiência e prepara os sistemas neuromuscular e mental para permanecer em movimento por longas horas.",
+      "how_to_do": "Comece em ritmo conversacional e mantenha a paciência nos primeiros quilômetros. É o momento perfeito para testar tênis de prova, meias antiatrito e o protocolo de géis de carboidrato a cada 40-50 minutos.",
+      "heart_rate_zone": "Z2 a Z3 (Aeróbica Estável - 70% a 82% FCmax)",
+      "borg_scale": "5 a 7 (Desafiador pelo acúmulo de tempo)",
+      "recovery": "Hidratação rigorosa com eletrólitos e refeição rica em carboidratos complexos e proteínas.",
+      "icon": "fa-route"
+    },
+    {
+      "id": "gloss-ritmo",
+      "type": "Ritmo / Tempo Run",
+      "tag": "Limiar Anaeróbico",
+      "summary": "Corrida em velocidade sustentada no limiar de acúmulo de ácido lático.",
+      "description": "Treino contínuo em ritmo \"confortavelmente duro\" mantido por 20 a 50 minutos. Ensina seu corpo a reciclar e depurar o lactato sanguíneo em velocidades próximas às de prova de 10k e Meia Maratona.",
+      "how_to_do": "Exige foco mental afiado. Se você começar rápido demais, entrará em fadiga precoce. Encontre a velocidade prescrita logo no primeiro quilômetro e mantenha o relógio travado.",
+      "heart_rate_zone": "Z4 (Limiar de Lactato - 85% a 90% FCmax)",
+      "borg_scale": "7 a 8 (Duro, porém sustentável)",
+      "recovery": "Desaquecimento obrigatório com trote suave de 1km a 2km.",
+      "icon": "fa-gauge-high"
+    }
+  ],
+  "races": [
+    {
+      "id": "race-1",
+      "title": "Maratona Internacional de Porto Alegre 2026",
+      "date": "2026-06-07",
+      "city": "Porto Alegre, RS",
+      "country": "Brasil 🇧🇷",
+      "distances": [
+        "42k",
+        "21k",
+        "10k",
+        "5k"
+      ],
+      "badge": "Major Alvo do Clube",
+      "description": "O percurso mais plano e veloz da América Latina, beirando a orla do Guaíba. Prova ideal para bater recorde pessoal (RP) e conquistar índice para a Maratona de Boston.",
+      "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80",
+      "official_url": "https://www.maratonadeportoalegre.com.br"
+    },
+    {
+      "id": "race-2",
+      "title": "Maratón Internacional de Buenos Aires 2026",
+      "date": "2026-09-20",
+      "city": "Buenos Aires",
+      "country": "Argentina 🇦🇷",
+      "distances": [
+        "42k",
+        "21k"
+      ],
+      "badge": "Viagem Oficial BRAR",
+      "description": "A maior maratona da América do Sul! Largada em Palermo passando pelo Obelisco, Casa Rosada, La Boca e Puerto Madero com clima frio e torcida apaixonada pelas ruas.",
+      "image_url": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=80",
+      "official_url": "https://maratondebuenosaires.com"
+    },
+    {
+      "id": "race-3",
+      "title": "Meia Maratona Internacional de Florianópolis",
+      "date": "2026-08-16",
+      "city": "Florianópolis, SC",
+      "country": "Brasil 🇧🇷",
+      "distances": [
+        "21k",
+        "10k",
+        "5k"
+      ],
+      "badge": "Meia Maratona Rápida",
+      "description": "Corrida costeira pelas pontes de Floripa com vista para o mar, brisa oceânica e clima ameno de inverno. Excelente preparação para os maratonistas do segundo semestre.",
+      "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=1200&q=80",
+      "official_url": "https://www.meiamaratonadeflorianopolis.com.br"
+    },
+    {
+      "id": "race-1788447124013",
+      "title": "Media Maratón 21k RUN PUERTO NORTE 2026",
+      "date": "2026-10-04",
+      "city": "Rosario / Argentina",
+      "country": "Brasil 🇧🇷",
+      "distances": [
+        "21k",
+        "10k",
+        "4k"
+      ],
+      "badge": "Prova Oficial",
+      "description": "La prueba comienza en el emblemático Barquito de Papel, un punto de encuentro clásico de la costanera rosarina. Desde allí, el circuito se desarrolla en un trazado dinámico que combina tramos modernos de torres residenciales con la amplitud verde de los parques ribereños.\n\nPrimer tramo (Zona Norte): Los corredores se dirigen hacia el norte por la franja costera, transitando un terreno plano y veloz ideal para buscar ritmo, con vistas abiertas al río hacia la zona de La Florida.\n\nSegundo tramo (Regreso y Parques): Tras el retome correspondiente, la ruta enfilará de regreso hacia el sur, adentrándose por el sistema de parques de la ribera (como Parque España y zonas aledañas), ofreciendo un entorno arbolado y muy pintoresco.\n\nCierre (La Llegada): El tramo final retoma el borde costero rumbo al norte para culminar nuevamente en el Barquito de Papel, donde los participantes cruzarán el arco de meta junto a la costa.",
+      "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80",
+      "official_url": ""
+    }
+  ],
+  "gallery": [
+    {
+      "id": "photo-1",
+      "title": "Treino de Tiros na Pista",
+      "subtitle": "Pelotão de velocidade focado nas séries de 1.000m",
+      "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80",
+      "date": "2026-08-25"
+    },
+    {
+      "id": "photo-2",
+      "title": "Longão de Sábado na Orla",
+      "subtitle": "16km e 26km rodados ao amanhecer",
+      "image_url": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=80",
+      "date": "2026-08-29"
+    },
+    {
+      "id": "photo-3",
+      "title": "Conexão Brasil & Argentina",
+      "subtitle": "Comunidade Tropical Club reunida em prova internacional",
+      "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=1200&q=80",
+      "date": "2026-08-15"
+    },
+    {
+      "id": "photo-4",
+      "title": "Chegada e Pódio da Equipe",
+      "subtitle": "Superação de metas e novos Recordes Pessoais (RP)",
+      "image_url": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1200&q=80",
+      "date": "2026-08-10"
+    }
+  ]
+}
