@@ -454,7 +454,14 @@ const db = {
     saveData(data);
     return newRunner;
   },
-
+deleteRunner(id) {
+    const data = loadData();
+    data.runners = (data.runners || []).filter(r => r.id !== id);
+    data.workouts = (data.workouts || []).filter(w => w.runner_id !== id);
+    data.feedbacks = (data.feedbacks || []).filter(f => f.runner_id !== id);
+    saveData(data);
+    return true;
+  },
   // Treinos
   getWorkouts(filters = {}) {
     const data = loadData();

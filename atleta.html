@@ -22,7 +22,6 @@
         }
     </script>
     <style>
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -31,14 +30,13 @@
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans min-h-screen flex flex-col items-center p-3 sm:p-4 antialiased transition-colors duration-200">
 
-    <!-- Top Navigation / Switcher -->
+    <!-- Top Navigation / Logout -->
     <div class="w-full max-w-lg flex justify-between items-center mb-3 text-xs text-neutral-500 dark:text-neutral-400">
-        <a href="treinador.html" class="flex items-center gap-1.5 text-black dark:text-white font-bold hover:underline transition">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Painel do Treinador</span>
-        </a>
+        <button onclick="logout()" class="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300 font-bold hover:underline transition">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Sair / Trocar Conta</span>
+        </button>
         <div class="flex items-center gap-2">
-            <!-- Botão de Alternar Tema (Claro / Escuro) -->
             <button onclick="toggleTheme()" class="theme-toggle-btn p-1.5 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-lg text-xs shadow-xs transition text-neutral-700 dark:text-neutral-300">
                 <i class="fa-solid fa-moon"></i>
             </button>
@@ -49,11 +47,10 @@
         </div>
     </div>
 
-    <!-- Cabeçalho do App (Padrão Oficial Preto e Branco) -->
+    <!-- Cabeçalho do App (Focado no Atleta Logado) -->
     <header class="w-full max-w-lg bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 mb-3 shadow-xs transition flex flex-col gap-3">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Logo Ícone Pista de Corrida TC -->
                 <div class="w-11 h-11 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black tracking-tighter text-sm border border-neutral-800 dark:border-neutral-200 shadow-xs">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 10a8 8 0 0 1 16 0v4a8 8 0 0 1-16 0z"></path>
@@ -72,23 +69,20 @@
             </div>
         </div>
 
-        <!-- Seletor Rápido de Atleta -->
+        <!-- Dados do Atleta Logado -->
         <div class="pt-2 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs">
-            <span class="text-neutral-500 dark:text-neutral-400 font-medium">Perfil:</span>
-            <select id="runner-select" onchange="switchRunner(this.value)" class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg px-2.5 py-1 text-xs text-black dark:text-white font-bold focus:border-black dark:focus:border-white outline-none">
-                <!-- Preenchido via JS -->
-            </select>
+            <span class="text-neutral-500 dark:text-neutral-400 font-medium">Atleta Logado:</span>
+            <strong id="logged-athlete-name" class="text-black dark:text-white font-bold text-sm">Carregando...</strong>
         </div>
 
-        <!-- Meta e Pace do Atleta Selecionado -->
         <div id="runner-meta-box" class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 flex justify-between items-center text-xs">
             <div class="truncate mr-2">
                 <span class="text-[10px] text-neutral-400 dark:text-neutral-500 block uppercase font-bold">Objetivo Principal</span>
-                <strong id="runner-goal-text" class="text-neutral-900 dark:text-neutral-100 truncate font-bold">Meia Maratona 21k</strong>
+                <strong id="runner-goal-text" class="text-neutral-900 dark:text-neutral-100 truncate font-bold">-</strong>
             </div>
             <div class="text-right shrink-0">
                 <span class="text-[10px] text-neutral-400 dark:text-neutral-500 block uppercase font-bold">Pace Base</span>
-                <strong id="runner-pace-text" class="text-black dark:text-white font-black">5:15 /km</strong>
+                <strong id="runner-pace-text" class="text-black dark:text-white font-black">-</strong>
             </div>
         </div>
     </header>
@@ -96,25 +90,18 @@
     <!-- NAVEGAÇÃO POR ABAS (TABS) -->
     <nav class="w-full max-w-lg mb-4 sticky top-2 z-30 bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md p-1 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-xs">
         <div class="grid grid-cols-4 gap-1 text-xs font-bold text-center">
-            <!-- Tab 1: Meus Treinos -->
             <button onclick="switchTab('treinos')" id="tab-btn-treinos" class="tab-btn py-2 px-1 rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-1 bg-black dark:bg-white text-white dark:text-black shadow-xs">
                 <i class="fa-solid fa-person-running text-xs"></i>
                 <span class="text-[11px] sm:text-xs tracking-wide">Treinos</span>
             </button>
-
-            <!-- Tab 2: Guia de Exercícios (Fartlek, Regenerativo...) -->
             <button onclick="switchTab('guia')" id="tab-btn-guia" class="tab-btn py-2 px-1 rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-1 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">
                 <i class="fa-solid fa-book-open text-xs"></i>
                 <span class="text-[11px] sm:text-xs tracking-wide">Guia</span>
             </button>
-
-            <!-- Tab 3: Próximas Corridas (Maratonas) -->
             <button onclick="switchTab('corridas')" id="tab-btn-corridas" class="tab-btn py-2 px-1 rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-1 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">
                 <i class="fa-solid fa-flag-checkered text-xs"></i>
                 <span class="text-[11px] sm:text-xs tracking-wide">Corridas</span>
             </button>
-
-            <!-- Tab 4: Galeria de Fotos -->
             <button onclick="switchTab('galeria')" id="tab-btn-galeria" class="tab-btn py-2 px-1 rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-1 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">
                 <i class="fa-solid fa-images text-xs"></i>
                 <span class="text-[11px] sm:text-xs tracking-wide">Fotos</span>
@@ -122,9 +109,7 @@
         </div>
     </nav>
 
-    <!-- ==================================================== -->
-    <!-- ABA 1: MEUS TREINOS (SEMANA ATUAL) -->
-    <!-- ==================================================== -->
+    <!-- ABA 1: MEUS TREINOS -->
     <section id="tab-content-treinos" class="w-full max-w-lg flex flex-col gap-3 pb-12">
         <div class="flex items-center justify-between px-1">
             <h2 class="text-xs font-black uppercase tracking-widest text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
@@ -135,8 +120,6 @@
                 <i class="fa-solid fa-rotate-right"></i>
             </button>
         </div>
-
-        <!-- Lista de Treinos (Preenchida via JavaScript) -->
         <div id="workouts-container" class="flex flex-col gap-3">
             <div class="text-center py-10 text-neutral-400 text-xs">
                 <i class="fa-solid fa-spinner fa-spin text-lg mb-2 text-neutral-600 dark:text-neutral-300"></i>
@@ -145,9 +128,7 @@
         </div>
     </section>
 
-    <!-- ==================================================== -->
-    <!-- ABA 2: GUIA DE EXERCÍCIOS / GLOSSÁRIO EDUCATIVO -->
-    <!-- ==================================================== -->
+    <!-- ABA 2: GUIA -->
     <section id="tab-content-guia" class="hidden w-full max-w-lg flex flex-col gap-3.5 pb-12">
         <div class="flex items-center justify-between px-1">
             <div>
@@ -158,16 +139,10 @@
                 <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Entenda como executar cada tipo de treino prescrito</p>
             </div>
         </div>
-
-        <!-- Container dos Cards do Glossário -->
-        <div id="glossary-container" class="flex flex-col gap-3">
-            <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="glossary-container" class="flex flex-col gap-3"></div>
     </section>
 
-    <!-- ==================================================== -->
-    <!-- ABA 3: PRÓXIMAS CORRIDAS & MARATONAS -->
-    <!-- ==================================================== -->
+    <!-- ABA 3: CORRIDAS -->
     <section id="tab-content-corridas" class="hidden w-full max-w-lg flex flex-col gap-3.5 pb-12">
         <div class="flex items-center justify-between px-1">
             <div>
@@ -182,16 +157,10 @@
                 <span>Adicionar Prova</span>
             </button>
         </div>
-
-        <!-- Lista de Provas -->
-        <div id="races-container" class="flex flex-col gap-3.5">
-            <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="races-container" class="flex flex-col gap-3.5"></div>
     </section>
 
-    <!-- ==================================================== -->
-    <!-- ABA 4: GALERIA DE FOTOS DA COMUNIDADE -->
-    <!-- ==================================================== -->
+    <!-- ABA 4: FOTOS -->
     <section id="tab-content-galeria" class="hidden w-full max-w-lg flex flex-col gap-3.5 pb-12">
         <div class="flex items-center justify-between px-1">
             <div>
@@ -206,16 +175,10 @@
                 <span>Subir Foto</span>
             </button>
         </div>
-
-        <!-- Grid de Fotos -->
-        <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- ==================================================== -->
-    <!-- MODAL 1: FEEDBACK DO TREINO REALIZADO -->
-    <!-- ==================================================== -->
+    <!-- MODAL 1: FEEDBACK -->
     <div id="feedback-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
         <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-5 shadow-2xl my-6 text-neutral-900 dark:text-white">
             <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-3">
@@ -224,205 +187,156 @@
                         <i class="fa-solid fa-check"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider">Registrar Execução do Treino</h3>
-                        <p id="modal-workout-subtitle" class="text-[11px] text-neutral-500 dark:text-neutral-400">Preencha os dados reais da corrida</p>
+                        <h3 class="text-sm font-bold uppercase tracking-wider">Registrar Execução do Treino</h3>
+                        <p id="modal-workout-subtitle" class="text-[11px] text-neutral-500">Preencha os dados reais da corrida</p>
                     </div>
                 </div>
-                <button onclick="closeFeedbackModal()" class="text-neutral-400 hover:text-black dark:hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeFeedbackModal()" class="text-neutral-400 hover:text-black dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <form id="feedback-form" onsubmit="submitFeedback(event)" class="flex flex-col gap-3">
                 <input type="hidden" id="active-training-id">
-                
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Distância Real (km) *</label>
-                        <input type="number" step="0.01" id="actual-distance" placeholder="Ex: 8.5" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                        <label class="text-xs font-semibold block mb-1">Distância Real (km) *</label>
+                        <input type="number" step="0.01" id="actual-distance" placeholder="Ex: 8.5" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                     </div>
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Tempo Total *</label>
-                        <input type="text" id="actual-duration" placeholder="Ex: 42:15" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                        <label class="text-xs font-semibold block mb-1">Tempo Total *</label>
+                        <input type="text" id="actual-duration" placeholder="Ex: 42:15" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Pace Médio Real *</label>
-                        <input type="text" id="actual-pace" placeholder="Ex: 4:58 /km" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                        <label class="text-xs font-semibold block mb-1">Pace Médio Real *</label>
+                        <input type="text" id="actual-pace" placeholder="Ex: 4:58 /km" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                     </div>
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Esforço Borg (1 a 10) *</label>
-                        <select id="perceived-exertion" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
-                            <option value="1">1 - Muito Leve (Recuperação)</option>
-                            <option value="2">2 - Leve</option>
+                        <label class="text-xs font-semibold block mb-1">Esforço Borg (1 a 10) *</label>
+                        <select id="perceived-exertion" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
+                            <option value="1">1 - Muito Leve</option>
                             <option value="3">3 - Moderado Leve</option>
-                            <option value="4">4 - Moderado (Conversacional)</option>
                             <option value="5" selected>5 - Confortavelmente Duro</option>
-                            <option value="6">6 - Meio Difícil</option>
-                            <option value="7">7 - Difícil (Ritmo Prova)</option>
-                            <option value="8">8 - Muito Difícil (Tiros)</option>
+                            <option value="7">7 - Difícil</option>
                             <option value="9">9 - Quase Máximo</option>
                             <option value="10">10 - Exaustão Máxima</option>
                         </select>
                     </div>
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Link do Strava ou Garmin (Opcional)</label>
-                    <input type="url" id="strava-url" placeholder="https://www.strava.com/activities/..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">Link do Strava (Opcional)</label>
+                    <input type="url" id="strava-url" placeholder="https://www.strava.com/activities/..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Como você se sentiu hoje? (Sensações / Dores)</label>
-                    <textarea id="athlete-notes" rows="2" placeholder="Conta pro professor como foi o ritmo, clima, cansaço..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none resize-none"></textarea>
+                    <label class="text-xs font-semibold block mb-1">Como você se sentiu hoje?</label>
+                    <textarea id="athlete-notes" rows="2" placeholder="Conta pro professor..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none resize-none"></textarea>
                 </div>
-
                 <div class="flex gap-2 mt-2">
-                    <button type="button" onclick="closeFeedbackModal()" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-bold py-2.5 rounded-xl text-xs transition-all">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">Enviar Feedback</button>
+                    <button type="button" onclick="closeFeedbackModal()" class="flex-1 bg-neutral-200 dark:bg-neutral-800 py-2.5 rounded-xl text-xs font-bold">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black text-white dark:bg-white dark:text-black py-2.5 rounded-xl text-xs font-bold">Enviar Feedback</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ==================================================== -->
-    <!-- MODAL 2: ADICIONAR NOVA PROVA / CORRIDA -->
-    <!-- ==================================================== -->
+    <!-- MODAL 2: PROVAS -->
     <div id="new-race-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
         <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-5 shadow-2xl my-6 text-neutral-900 dark:text-white">
             <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-3">
-                <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-flag-checkered"></i>
-                    <span>Cadastrar Próxima Prova</span>
-                </h3>
-                <button onclick="closeModal('new-race-modal')" class="text-neutral-400 hover:text-black dark:hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <h3 class="text-sm font-bold uppercase tracking-wider">Cadastrar Próxima Prova</h3>
+                <button onclick="closeModal('new-race-modal')" class="text-neutral-400 hover:text-black dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <form id="new-race-form" onsubmit="handleCreateRace(event)" class="flex flex-col gap-3">
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Nome da Prova *</label>
-                    <input type="text" id="race-title" placeholder="Ex: Maratona do Rio 2026" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">Nome da Prova *</label>
+                    <input type="text" id="race-title" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Data da Prova *</label>
-                        <input type="date" id="race-date" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                        <label class="text-xs font-semibold block mb-1">Data *</label>
+                        <input type="date" id="race-date" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                     </div>
                     <div>
-                        <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Cidade / País</label>
-                        <input type="text" id="race-city" placeholder="Ex: Rio de Janeiro, BR" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                        <label class="text-xs font-semibold block mb-1">Cidade</label>
+                        <input type="text" id="race-city" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                     </div>
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Distâncias (separadas por vírgula)</label>
-                    <input type="text" id="race-distances" placeholder="Ex: 42k, 21k, 10k, 5k" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">Distâncias</label>
+                    <input type="text" id="race-distances" placeholder="42k, 21k, 10k" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">URL da Imagem / Banner da Prova</label>
-                    <input type="url" id="race-image" placeholder="https://..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">URL da Imagem</label>
+                    <input type="url" id="race-image" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
-                <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Descrição / Destaque da Prova</label>
-                    <textarea id="race-description" rows="2" placeholder="Destaques do percurso, altimetria, clima..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none resize-none"></textarea>
-                </div>
-
                 <div class="flex gap-2 mt-2">
-                    <button type="button" onclick="closeModal('new-race-modal')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-bold py-2.5 rounded-xl text-xs transition-all">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">Salvar Prova</button>
+                    <button type="button" onclick="closeModal('new-race-modal')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 py-2.5 rounded-xl text-xs font-bold">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black text-white dark:bg-white dark:text-black py-2.5 rounded-xl text-xs font-bold">Salvar Prova</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ==================================================== -->
-    <!-- MODAL 3: SUBIR NOVA FOTO / MOMENTO -->
-    <!-- ==================================================== -->
+    <!-- MODAL 3: FOTO -->
     <div id="new-photo-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
         <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 w-full max-w-md rounded-2xl p-5 shadow-2xl my-6 text-neutral-900 dark:text-white">
             <div class="flex justify-between items-center pb-3 border-b border-neutral-200 dark:border-neutral-800 mb-3">
-                <h3 class="text-sm font-bold text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-camera"></i>
-                    <span>Adicionar Foto da Comunidade</span>
-                </h3>
-                <button onclick="closeModal('new-photo-modal')" class="text-neutral-400 hover:text-black dark:hover:text-white">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <h3 class="text-sm font-bold uppercase tracking-wider">Adicionar Foto da Comunidade</h3>
+                <button onclick="closeModal('new-photo-modal')" class="text-neutral-400 hover:text-black dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
             <form id="new-photo-form" onsubmit="handleCreatePhoto(event)" class="flex flex-col gap-3">
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Título do Momento *</label>
-                    <input type="text" id="photo-title" placeholder="Ex: Treino de Pista no Parque" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">Título do Momento *</label>
+                    <input type="text" id="photo-title" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">Legenda / Descrição</label>
-                    <input type="text" id="photo-subtitle" placeholder="Ex: Pelotão das 6h da manhã" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">Legenda</label>
+                    <input type="text" id="photo-subtitle" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
                 <div>
-                    <label class="text-xs text-neutral-700 dark:text-neutral-300 font-semibold block mb-1">URL da Imagem *</label>
-                    <input type="url" id="photo-url" required placeholder="https://images.unsplash.com/..." class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs text-neutral-900 dark:text-white focus:bg-white dark:focus:bg-black focus:border-black dark:focus:border-white outline-none">
+                    <label class="text-xs font-semibold block mb-1">URL da Imagem *</label>
+                    <input type="url" id="photo-url" required class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none">
                 </div>
-
-                <!-- Sugestões de Fotos de Corrida para testes imediatos -->
-                <div class="bg-neutral-50 dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800">
-                    <span class="text-[10px] font-bold text-neutral-400 block mb-1.5 uppercase">Fotos Rápidas de Exemplo:</span>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1200&q=80', 'Pelotão de Corrida', 'Treino em grupo no asfalto')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Pelotão Asfalto</button>
-                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1200&q=80', 'Corrida ao Pôr do Sol', 'Treino de ritmo na orla')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Sunset Run</button>
-                        <button type="button" onclick="selectPresetPhoto('https://images.unsplash.com/photo-1486218119243-13883505764c?auto=format&fit=crop&w=1200&q=80', 'Sprint de Velocidade', 'Tiros na pista de atletismo')" class="text-[10px] bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200 hover:bg-black hover:text-white transition">Pista Track</button>
-                    </div>
-                </div>
-
                 <div class="flex gap-2 mt-2">
-                    <button type="button" onclick="closeModal('new-photo-modal')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-bold py-2.5 rounded-xl text-xs transition-all">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">Publicar Foto</button>
+                    <button type="button" onclick="closeModal('new-photo-modal')" class="flex-1 bg-neutral-200 dark:bg-neutral-800 py-2.5 rounded-xl text-xs font-bold">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-black text-white dark:bg-white dark:text-black py-2.5 rounded-xl text-xs font-bold">Publicar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Script de Lógica Front-end -->
+    <!-- Script de Lógica -->
     <script>
         const API_URL = '/api';
-        let currentRunnerId = 'runner-1';
-        let currentRunnersList = [];
-        let currentTab = 'treinos';
+        let currentRunnerId = localStorage.getItem('tropical_runner_id');
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const queryRunner = urlParams.get('runner');
-            if (queryRunner) {
-                currentRunnerId = queryRunner;
+            // Verifica se o aluno está logado
+            if (!currentRunnerId || localStorage.getItem('tropical_user_role') !== 'athlete') {
+                alert('Sessão expirada ou acesso não autorizado. Faça login novamente.');
+                window.location.href = 'index.html';
+                return;
             }
 
-            await loadRunners();
+            await loadRunnerDetails();
             await loadWorkouts(currentRunnerId);
             loadGlossary();
             loadRaces();
             loadGallery();
         });
 
-        // ====================================================
-        // CONTROLE DAS ABAS (TABS)
-        // ====================================================
-        function switchTab(tabName) {
-            currentTab = tabName;
-            const tabs = ['treinos', 'guia', 'corridas', 'galeria'];
+        function logout() {
+            localStorage.removeItem('tropical_user_role');
+            localStorage.removeItem('tropical_runner_id');
+            localStorage.removeItem('tropical_runner_name');
+            window.location.href = 'index.html';
+        }
 
+        function switchTab(tabName) {
+            const tabs = ['treinos', 'guia', 'corridas', 'galeria'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-btn-${t}`);
                 const content = document.getElementById(`tab-content-${t}`);
-
                 if (t === tabName) {
                     btn.className = 'tab-btn py-2 px-1 rounded-xl transition flex flex-col sm:flex-row items-center justify-center gap-1 bg-black dark:bg-white text-white dark:text-black shadow-xs font-bold';
                     content.classList.remove('hidden');
@@ -433,65 +347,35 @@
             });
         }
 
-        // ====================================================
-        // ABA 1: TREINOS & ALUNOS
-        // ====================================================
-        async function loadRunners() {
+        async function loadRunnerDetails() {
             try {
-                const res = await fetch(`${API_URL}/runners`);
+                const res = await fetch(`${API_URL}/runners/${currentRunnerId}`);
                 const json = await res.json();
-                if (json.success && json.data.length > 0) {
-                    currentRunnersList = json.data;
-                    const select = document.getElementById('runner-select');
-                    select.innerHTML = '';
-                    
-                    currentRunnersList.forEach(r => {
-                        select.innerHTML += `<option value="${r.id}" ${r.id === currentRunnerId ? 'selected' : ''}>${r.name}</option>`;
-                    });
-
-                    updateRunnerHeaderInfo();
+                if (json.success) {
+                    const r = json.data;
+                    document.getElementById('logged-athlete-name').innerText = r.name;
+                    document.getElementById('runner-goal-text').innerText = r.goal || 'Plano de Treino';
+                    document.getElementById('runner-pace-text').innerText = r.base_pace || '-';
+                    document.getElementById('active-runner-badge').innerText = r.category || 'Atleta';
                 }
             } catch (err) {
-                console.error('Erro ao carregar lista de atletas:', err);
-            }
-        }
-
-        function switchRunner(runnerId) {
-            currentRunnerId = runnerId;
-            updateRunnerHeaderInfo();
-            loadWorkouts(currentRunnerId);
-        }
-
-        function updateRunnerHeaderInfo() {
-            const runner = currentRunnersList.find(r => r.id === currentRunnerId);
-            if (runner) {
-                document.getElementById('runner-goal-text').innerText = runner.goal || 'Plano de Treino';
-                document.getElementById('runner-pace-text').innerText = runner.base_pace || '-';
-                document.getElementById('active-runner-badge').innerText = runner.category || 'Atleta';
+                console.error(err);
             }
         }
 
         async function loadWorkouts(runnerId) {
             const container = document.getElementById('workouts-container');
-            container.innerHTML = `
-                <div class="text-center py-10 text-neutral-400 text-xs">
-                    <i class="fa-solid fa-spinner fa-spin text-lg mb-2 text-neutral-600 dark:text-neutral-300"></i>
-                    <p>Carregando treinos...</p>
-                </div>
-            `;
+            container.innerHTML = `<div class="text-center py-10 text-neutral-400 text-xs"><i class="fa-solid fa-spinner fa-spin text-lg mb-2"></i><p>Carregando treinos...</p></div>`;
 
             try {
                 const response = await fetch(`${API_URL}/trainings/${runnerId}`);
                 const result = await response.json();
-                
                 if (result.success) {
                     renderWorkouts(result.data);
-                } else {
-                    container.innerHTML = `<p class="text-center text-neutral-500 text-xs py-6">Erro ao carregar treinos.</p>`;
                 }
             } catch (error) {
-                console.error("Erro ao carregar treinos:", error);
-                container.innerHTML = `<p class="text-center text-neutral-500 text-xs py-6">Erro de conexão com o servidor.</p>`;
+                console.error(error);
+                container.innerHTML = `<p class="text-center text-neutral-500 text-xs py-6">Erro de conexão.</p>`;
             }
         }
 
@@ -501,12 +385,11 @@
 
             if (trainings.length === 0) {
                 container.innerHTML = `
-                    <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 text-center text-neutral-400 text-xs shadow-xs transition">
-                        <i class="fa-solid fa-person-walking text-2xl text-neutral-400 dark:text-neutral-600 mb-2"></i>
+                    <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8 text-center text-neutral-400 text-xs">
+                        <i class="fa-solid fa-person-walking text-2xl mb-2"></i>
                         <p class="font-bold text-neutral-800 dark:text-neutral-200">Nenhum treino prescrito para este período.</p>
-                        <p class="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">Seu professor irá disponibilizar a nova programação em breve.</p>
-                    </div>
-                `;
+                        <p class="text-[11px] text-neutral-500 mt-1">Seu professor irá disponibilizar a nova programação em breve.</p>
+                    </div>`;
                 return;
             }
 
@@ -518,391 +401,119 @@
                 const formattedDate = formatDateBR(t.date);
                 const dayName = getDayOfWeekName(t.date);
 
-                let cardHtml = `
-                    <div class="bg-white dark:bg-neutral-950 border ${isCompleted ? 'border-neutral-300 dark:border-neutral-700' : 'border-neutral-200 dark:border-neutral-800'} rounded-2xl p-4 shadow-xs transition">
-                        <!-- Top Bar: Data e Tipo -->
+                container.innerHTML += `
+                    <div class="bg-white dark:bg-neutral-950 border ${isCompleted ? 'border-neutral-300 dark:border-neutral-700' : 'border-neutral-200 dark:border-neutral-800'} rounded-2xl p-4 shadow-xs">
                         <div class="flex justify-between items-start mb-2.5">
-                            <span class="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${isCompleted ? 'bg-black dark:bg-white text-white dark:text-black' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700'}">
+                            <span class="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${isCompleted ? 'bg-black dark:bg-white text-white dark:text-black' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'}">
                                 ${t.workout_type} ${isCompleted ? '✓ Feito' : ''}
                             </span>
                             <div class="text-right">
-                                <span class="text-xs font-bold text-neutral-800 dark:text-neutral-200">${dayName}</span>
-                                <span class="text-[11px] text-neutral-400 dark:text-neutral-500 block font-medium">${formattedDate}</span>
+                                <span class="text-xs font-bold">${dayName}</span>
+                                <span class="text-[11px] text-neutral-400 block">${formattedDate}</span>
                             </div>
                         </div>
 
-                        <!-- Título e Descrição Principal -->
-                        <h3 class="text-sm font-bold text-black dark:text-white mb-1.5">${t.title}</h3>
+                        <h3 class="text-sm font-bold mb-1.5">${t.title}</h3>
                         <p class="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3 bg-neutral-50 dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800">${t.description}</p>
 
                         ${t.coach_notes ? `
-                            <div class="mb-3 text-[11px] text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
-                                <i class="fa-solid fa-lightbulb text-neutral-600 dark:text-neutral-400 mt-0.5 shrink-0"></i>
+                            <div class="mb-3 text-[11px] bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2.5 py-1.5 rounded-lg flex items-start gap-1.5">
+                                <i class="fa-solid fa-lightbulb mt-0.5 shrink-0"></i>
                                 <span><strong>Dica do Coach:</strong> ${t.coach_notes}</span>
-                            </div>
-                        ` : ''}
+                            </div>` : ''}
 
-                        <!-- Seção de Dados Realizados (Se concluído) -->
                         ${isCompleted && fb ? `
                             <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-3 mb-3">
-                                <span class="text-[10px] font-bold text-neutral-600 dark:text-neutral-400 uppercase tracking-wider block mb-2">Dados da sua corrida:</span>
+                                <span class="text-[10px] font-bold text-neutral-500 uppercase block mb-2">Dados da sua corrida:</span>
                                 <div class="grid grid-cols-4 gap-2 text-center">
-                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                                        <span class="text-[10px] text-neutral-400 block">Km</span>
-                                        <strong class="text-xs font-black text-black dark:text-white">${fb.actual_distance_km} km</strong>
-                                    </div>
-                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                                        <span class="text-[10px] text-neutral-400 block">Tempo</span>
-                                        <strong class="text-xs font-black text-black dark:text-white">${fb.actual_duration}</strong>
-                                    </div>
-                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                                        <span class="text-[10px] text-neutral-400 block">Pace</span>
-                                        <strong class="text-xs font-black text-black dark:text-white">${fb.actual_pace}</strong>
-                                    </div>
-                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800">
-                                        <span class="text-[10px] text-neutral-400 block">Esforço</span>
-                                        <strong class="text-xs font-black text-black dark:text-white">RPE ${fb.perceived_exertion}</strong>
-                                    </div>
+                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800"><span class="text-[10px] text-neutral-400 block">Km</span><strong class="text-xs font-black">${fb.actual_distance_km} km</strong></div>
+                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800"><span class="text-[10px] text-neutral-400 block">Tempo</span><strong class="text-xs font-black">${fb.actual_duration}</strong></div>
+                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800"><span class="text-[10px] text-neutral-400 block">Pace</span><strong class="text-xs font-black">${fb.actual_pace}</strong></div>
+                                    <div class="bg-white dark:bg-black p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800"><span class="text-[10px] text-neutral-400 block">Esforço</span><strong class="text-xs font-black">RPE ${fb.perceived_exertion}</strong></div>
                                 </div>
-                                ${fb.athlete_notes ? `
-                                    <p class="text-[11px] text-neutral-600 dark:text-neutral-300 italic mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">"${fb.athlete_notes}"</p>
-                                ` : ''}
-                                ${fb.strava_url ? `
-                                    <div class="mt-2 text-right">
-                                        <a href="${fb.strava_url}" target="_blank" class="text-[10px] text-black dark:text-white font-semibold underline inline-flex items-center gap-1">
-                                            <i class="fa-brands fa-strava"></i> Ver no Strava
-                                        </a>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        ` : ''}
+                                ${fb.athlete_notes ? `<p class="text-[11px] italic mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">"${fb.athlete_notes}"</p>` : ''}
+                            </div>` : ''}
 
-                        <!-- Retorno do Treinador (se houver) -->
                         ${fb && fb.coach_feedback ? `
                             <div class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl p-3 mb-3">
-                                <div class="flex items-center gap-1.5 text-xs font-bold text-black dark:text-white mb-1">
-                                    <i class="fa-solid fa-comment-dots text-neutral-500"></i>
-                                    <span>Comentário do Professor:</span>
-                                </div>
-                                <p class="text-xs text-neutral-700 dark:text-neutral-300">${fb.coach_feedback}</p>
-                            </div>
-                        ` : ''}
+                                <div class="flex items-center gap-1.5 text-xs font-bold mb-1"><i class="fa-solid fa-comment-dots"></i><span>Comentário do Professor:</span></div>
+                                <p class="text-xs">${fb.coach_feedback}</p>
+                            </div>` : ''}
 
-                        <!-- Rodapé do Card -->
-                        <div class="flex justify-between items-center pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs text-neutral-500 dark:text-neutral-400">
-                            <div>
-                                <span>Pace Alvo: <strong class="text-neutral-900 dark:text-neutral-200 font-semibold">${t.target_pace || 'Livre'}</strong></span>
-                                ${t.target_distance_km ? ` &middot; <span class="text-neutral-700 dark:text-neutral-300 font-medium">${t.target_distance_km}km</span>` : ''}
-                            </div>
-
+                        <div class="flex justify-between items-center pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs">
+                            <span>Pace Alvo: <strong>${t.target_pace || 'Livre'}</strong></span>
                             ${!isCompleted ? `
-                                <button onclick="openFeedbackModal('${t.id}', '${escapeHtml(t.title)}')" class="bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-xs active:scale-95 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>Concluir Treino</span>
-                                </button>
-                            ` : `
-                                <span class="text-black dark:text-white font-black text-xs flex items-center gap-1">
-                                    <i class="fa-solid fa-circle-check"></i> Registrado
-                                </span>
-                            `}
+                                <button onclick="openFeedbackModal('${t.id}', '${escapeHtml(t.title)}')" class="bg-black hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-xs flex items-center gap-1.5">
+                                    <i class="fa-solid fa-check"></i><span>Concluir Treino</span>
+                                </button>` : `
+                                <span class="font-black text-xs flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Registrado</span>`}
                         </div>
-                    </div>
-                `;
-
-                container.innerHTML += cardHtml;
+                    </div>`;
             });
         }
 
-        // ====================================================
-        // ABA 2: GLOSSÁRIO EDUCATIVO DE EXERCÍCIOS
-        // ====================================================
         async function loadGlossary() {
-            try {
-                const res = await fetch(`${API_URL}/glossary`);
-                const json = await res.json();
-                if (json.success) {
-                    renderGlossary(json.data);
-                }
-            } catch (err) {
-                console.error('Erro ao carregar glossário:', err);
+            const res = await fetch(`${API_URL}/glossary`);
+            const json = await res.json();
+            if (json.success) {
+                const container = document.getElementById('glossary-container');
+                container.innerHTML = '';
+                json.data.forEach(item => {
+                    container.innerHTML += `
+                        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs">
+                            <h3 class="text-sm font-black uppercase mb-1">${item.type}</h3>
+                            <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-2">${item.summary}</p>
+                            <p class="text-xs">${item.description}</p>
+                        </div>`;
+                });
             }
         }
 
-        function renderGlossary(items) {
-            const container = document.getElementById('glossary-container');
-            container.innerHTML = '';
-
-            items.forEach((item, index) => {
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs">
-                        <div class="flex items-start justify-between gap-2 mb-2">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-lg bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-xs">
-                                    <i class="fa-solid ${item.icon || 'fa-person-running'}"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-black text-black dark:text-white uppercase tracking-wide">${item.type}</h3>
-                                    <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">${item.tag}</span>
-                                </div>
-                            </div>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300">
-                                RPE ${item.borg_scale.split(' ')[0]}
-                            </span>
-                        </div>
-
-                        <p class="text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-2 leading-relaxed">${item.summary}</p>
-                        <p class="text-xs text-neutral-600 dark:text-neutral-400 mb-3 leading-relaxed">${item.description}</p>
-
-                        <!-- Box Como Executar -->
-                        <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-3 mb-2.5">
-                            <span class="text-[10px] font-black uppercase tracking-wider text-black dark:text-white block mb-1">
-                                <i class="fa-solid fa-bullseye mr-1"></i> Como Executar no Asfalto:
-                            </span>
-                            <p class="text-xs text-neutral-700 dark:text-neutral-300">${item.how_to_do}</p>
-                        </div>
-
-                        <!-- Métricas e Zonas -->
-                        <div class="grid grid-cols-2 gap-2 text-[11px] text-neutral-500 dark:text-neutral-400 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                            <div>
-                                <span class="block text-[10px] text-neutral-400 uppercase font-bold">Zona Alvo</span>
-                                <strong class="text-neutral-800 dark:text-neutral-200 font-semibold">${item.heart_rate_zone}</strong>
-                            </div>
-                            <div>
-                                <span class="block text-[10px] text-neutral-400 uppercase font-bold">Esforço Borg</span>
-                                <strong class="text-neutral-800 dark:text-neutral-200 font-semibold">${item.borg_scale}</strong>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // ====================================================
-        // ABA 3: PRÓXIMAS CORRIDAS & MARATONAS
-        // ====================================================
         async function loadRaces() {
-            try {
-                const res = await fetch(`${API_URL}/races`);
-                const json = await res.json();
-                if (json.success) {
-                    renderRaces(json.data);
-                }
-            } catch (err) {
-                console.error('Erro ao carregar corridas:', err);
+            const res = await fetch(`${API_URL}/races`);
+            const json = await res.json();
+            if (json.success) {
+                const container = document.getElementById('races-container');
+                container.innerHTML = '';
+                json.data.forEach(race => {
+                    container.innerHTML += `
+                        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 shadow-xs">
+                            <h3 class="text-sm font-black uppercase">${race.title}</h3>
+                            <p class="text-xs text-neutral-500">${race.city} &middot; ${formatDateBR(race.date)}</p>
+                            <p class="text-xs mt-2">${race.description || ''}</p>
+                        </div>`;
+                });
             }
         }
 
-        function renderRaces(races) {
-            const container = document.getElementById('races-container');
-            container.innerHTML = '';
-
-            races.sort((a, b) => a.date.localeCompare(b.date));
-
-            races.forEach(race => {
-                const raceDate = new Date(race.date + 'T00:00:00');
-                const formattedDate = formatDateExtenso(raceDate);
-                const daysRemaining = calculateDaysLeft(race.date);
-
-                let distanceChips = (race.distances || []).map(d => `
-                    <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-black dark:bg-white text-white dark:text-black">${d}</span>
-                `).join('');
-
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-xs">
-                        <!-- Imagem da Prova com Overlay -->
-                        <div class="relative h-44 w-full overflow-hidden bg-neutral-900">
-                            <img src="${race.image_url}" alt="${race.title}" class="w-full h-full object-cover filter grayscale contrast-125 opacity-80 hover:scale-105 transition duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                            
-                            <!-- Badges Flutuantes -->
-                            <div class="absolute top-3 left-3">
-                                <span class="text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded bg-white text-black shadow-sm">
-                                    ${race.badge || 'Oficial'}
-                                </span>
-                            </div>
-                            <div class="absolute top-3 right-3">
-                                <span class="text-[10px] font-bold px-2 py-1 rounded bg-black/80 backdrop-blur-sm text-white border border-neutral-700">
-                                    ${daysRemaining > 0 ? `Faltam ${daysRemaining} dias` : 'Hoje!'}
-                                </span>
-                            </div>
-
-                            <!-- Informações sobre a imagem -->
-                            <div class="absolute bottom-3 left-3 right-3 text-white">
-                                <span class="text-[11px] font-semibold text-neutral-300 block mb-0.5">${race.city} &middot; ${formattedDate}</span>
-                                <h3 class="text-base font-black uppercase tracking-wide leading-tight">${race.title}</h3>
-                            </div>
-                        </div>
-
-                        <!-- Corpo do Card da Prova -->
-                        <div class="p-4 flex flex-col gap-3">
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="text-[10px] text-neutral-400 uppercase font-bold mr-1">Distâncias:</span>
-                                ${distanceChips}
-                            </div>
-
-                            <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">${race.description}</p>
-
-                            <div class="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                                <span class="text-[11px] text-neutral-500 font-medium">${race.country}</span>
-                                <div class="flex gap-2">
-                                    ${race.official_url ? `
-                                        <a href="${race.official_url}" target="_blank" class="text-xs font-bold text-black dark:text-white underline hover:opacity-75">
-                                            Site Oficial <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i>
-                                        </a>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function calculateDaysLeft(dateIso) {
-            const target = new Date(dateIso + 'T00:00:00');
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const diffTime = target - today;
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        }
-
-        function formatDateExtenso(dateObj) {
-            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-            return `${dateObj.getDate()} de ${months[dateObj.getMonth()]} de ${dateObj.getFullYear()}`;
-        }
-
-        // ====================================================
-        // ABA 4: GALERIA DE FOTOS DA COMUNIDADE
-        // ====================================================
         async function loadGallery() {
-            try {
-                const res = await fetch(`${API_URL}/gallery`);
-                const json = await res.json();
-                if (json.success) {
-                    renderGallery(json.data);
-                }
-            } catch (err) {
-                console.error('Erro ao carregar galeria:', err);
-            }
-        }
-
-        function renderGallery(photos) {
-            const container = document.getElementById('gallery-container');
-            container.innerHTML = '';
-
-            photos.forEach(photo => {
-                container.innerHTML += `
-                    <div class="group bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-xs hover:border-black dark:hover:border-white transition">
-                        <div class="relative aspect-square w-full overflow-hidden bg-neutral-900">
-                            <img src="${photo.image_url}" alt="${photo.title}" class="w-full h-full object-cover filter grayscale contrast-110 group-hover:scale-105 transition duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
-                            
-                            <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
-                                <h4 class="text-xs font-black uppercase tracking-wide truncate">${photo.title}</h4>
-                                <p class="text-[10px] text-neutral-300 truncate">${photo.subtitle || 'Tropical Club'}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        // ====================================================
-        // MODAIS & CRIAÇÃO (PROVAS E FOTOS)
-        // ====================================================
-        function openNewRaceModal() {
-            document.getElementById('new-race-modal').classList.remove('hidden');
-        }
-
-        function openNewPhotoModal() {
-            document.getElementById('new-photo-modal').classList.remove('hidden');
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        async function handleCreateRace(e) {
-            e.preventDefault();
-            const title = document.getElementById('race-title').value;
-            const date = document.getElementById('race-date').value;
-            const city = document.getElementById('race-city').value;
-            const distancesStr = document.getElementById('race-distances').value;
-            const distances = distancesStr ? distancesStr.split(',').map(s => s.trim()) : ['10k'];
-            const image_url = document.getElementById('race-image').value;
-            const description = document.getElementById('race-description').value;
-
-            try {
-                const res = await fetch(`${API_URL}/races`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, date, city, distances, image_url, description })
+            const res = await fetch(`${API_URL}/gallery`);
+            const json = await res.json();
+            if (json.success) {
+                const container = document.getElementById('gallery-container');
+                container.innerHTML = '';
+                json.data.forEach(photo => {
+                    container.innerHTML += `
+                        <div class="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-xs">
+                            <img src="${photo.image_url}" alt="${photo.title}" class="w-full h-40 object-cover">
+                            <div class="p-3"><h4 class="text-xs font-black uppercase">${photo.title}</h4><p class="text-[10px] text-neutral-400">${photo.subtitle || ''}</p></div>
+                        </div>`;
                 });
-                const data = await res.json();
-                if (data.success) {
-                    alert('Prova adicionada com sucesso ao calendário!');
-                    closeModal('new-race-modal');
-                    document.getElementById('new-race-form').reset();
-                    loadRaces();
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao salvar prova.');
             }
         }
 
-        function selectPresetPhoto(url, title, subtitle) {
-            document.getElementById('photo-url').value = url;
-            document.getElementById('photo-title').value = title;
-            document.getElementById('photo-subtitle').value = subtitle;
-        }
-
-        async function handleCreatePhoto(e) {
-            e.preventDefault();
-            const title = document.getElementById('photo-title').value;
-            const subtitle = document.getElementById('photo-subtitle').value;
-            const image_url = document.getElementById('photo-url').value;
-
-            try {
-                const res = await fetch(`${API_URL}/gallery`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, subtitle, image_url })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    alert('Foto publicada na galeria do clube!');
-                    closeModal('new-photo-modal');
-                    document.getElementById('new-photo-form').reset();
-                    loadGallery();
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao salvar foto.');
-            }
-        }
-
-        // ====================================================
-        // FEEDBACK DE TREINO
-        // ====================================================
         function openFeedbackModal(trainingId, title) {
             document.getElementById('active-training-id').value = trainingId;
-            document.getElementById('modal-workout-subtitle').innerText = title ? `Treino: ${title}` : 'Preencha os dados reais';
+            document.getElementById('modal-workout-subtitle').innerText = `Treino: ${title}`;
             document.getElementById('feedback-modal').classList.remove('hidden');
         }
+        function closeFeedbackModal() { document.getElementById('feedback-modal').classList.add('hidden'); }
+        function openNewRaceModal() { document.getElementById('new-race-modal').classList.remove('hidden'); }
+        function openNewPhotoModal() { document.getElementById('new-photo-modal').classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-        function closeFeedbackModal() {
-            document.getElementById('feedback-modal').classList.add('hidden');
-            document.getElementById('feedback-form').reset();
-        }
-
-        async function submitFeedback(event) {
-            event.preventDefault();
-            
+        async function submitFeedback(e) {
+            e.preventDefault();
             const workout_id = document.getElementById('active-training-id').value;
             const actual_distance_km = parseFloat(document.getElementById('actual-distance').value);
             const actual_duration = document.getElementById('actual-duration').value;
@@ -911,51 +522,60 @@
             const athlete_notes = document.getElementById('athlete-notes').value;
             const strava_url = document.getElementById('strava-url').value;
 
-            try {
-                let response = await fetch(`${API_URL}/feedbacks`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        workout_id,
-                        actual_distance_km,
-                        actual_duration,
-                        actual_pace,
-                        perceived_exertion,
-                        athlete_notes,
-                        strava_url
-                    })
-                });
-
-                let result = await response.json();
-                if (result.success) {
-                    alert("Treino registrado com sucesso! Seu professor já pode acompanhar sua evolução.");
-                    closeFeedbackModal();
-                    loadWorkouts(currentRunnerId);
-                } else {
-                    alert("Erro ao registrar treino: " + (result.error || 'Tente novamente.'));
-                }
-            } catch (error) {
-                console.error("Erro na requisição:", error);
-                alert("Erro de conexão com o servidor.");
+            const res = await fetch(`${API_URL}/feedbacks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ workout_id, actual_distance_km, actual_duration, actual_pace, perceived_exertion, athlete_notes, strava_url })
+            });
+            const json = await res.json();
+            if (json.success) {
+                alert('Treino registrado com sucesso!');
+                closeFeedbackModal();
+                loadWorkouts(currentRunnerId);
             }
         }
 
-        function formatDateBR(isoStr) {
-            if (!isoStr) return '';
-            const parts = isoStr.split('-');
-            return `${parts[2]}/${parts[1]}`;
+        async function handleCreateRace(e) {
+            e.preventDefault();
+            const title = document.getElementById('race-title').value;
+            const date = document.getElementById('race-date').value;
+            const city = document.getElementById('race-city').value;
+            const distances = document.getElementById('race-distances').value.split(',');
+            const image_url = document.getElementById('race-image').value;
+
+            const res = await fetch(`${API_URL}/races`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, date, city, distances, image_url })
+            });
+            if ((await res.json()).success) {
+                alert('Prova adicionada!');
+                closeModal('new-race-modal');
+                loadRaces();
+            }
         }
 
-        function getDayOfWeekName(isoStr) {
-            if (!isoStr) return '';
-            const d = new Date(isoStr + 'T00:00:00');
-            const names = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-            return names[d.getDay()];
+        async function handleCreatePhoto(e) {
+            e.preventDefault();
+            const title = document.getElementById('photo-title').value;
+            const subtitle = document.getElementById('photo-subtitle').value;
+            const image_url = document.getElementById('photo-url').value;
+
+            const res = await fetch(`${API_URL}/gallery`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, subtitle, image_url })
+            });
+            if ((await res.json()).success) {
+                alert('Foto publicada!');
+                closeModal('new-photo-modal');
+                loadGallery();
+            }
         }
 
-        function escapeHtml(str) {
-            return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        }
+        function formatDateBR(iso) { if (!iso) return ''; const p = iso.split('-'); return `${p[2]}/${p[1]}`; }
+        function getDayOfWeekName(iso) { if (!iso) return ''; const d = new Date(iso + 'T00:00:00'); return ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][d.getDay()]; }
+        function escapeHtml(s) { return (s || '').replace(/'/g, "\\'"); }
     </script>
 </body>
 </html>

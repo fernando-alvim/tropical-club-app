@@ -56,7 +56,14 @@ app.post('/api/runners', (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
+app.delete('/api/runners/:id', (req, res) => {
+  try {
+    db.deleteRunner(req.params.id);
+    res.json({ success: true, message: 'Atleta excluído com sucesso' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 // Treinos (Prescrição e Listagem)
 app.get('/api/workouts', (req, res) => {
   try {

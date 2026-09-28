@@ -3,35 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tropical Club - Plataforma de Corrida</title>
-    <!-- Script de Inicialização Rápida de Tema -->
+    <title>Tropical Club - Login & Acesso</title>
     <script src="theme.js"></script>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class'
-        }
-    </script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
 </head>
 <body class="bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans min-h-screen flex flex-col justify-between items-center p-4 antialiased transition-colors duration-200">
 
-    <!-- Top Bar -->
     <div class="w-full max-w-md flex justify-between items-center pt-3">
-        <span class="text-xs font-black text-black dark:text-white uppercase tracking-widest">Tropical Club</span>
+        <span class="text-xs font-black uppercase tracking-widest">Tropical Club</span>
         <div class="flex items-center gap-2">
-            <!-- Botão de Alternar Tema (Claro / Escuro) -->
-            <button onclick="toggleTheme()" class="theme-toggle-btn p-1.5 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-lg text-xs shadow-xs transition text-neutral-700 dark:text-neutral-300">
+            <button onclick="toggleTheme()" class="p-1.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg text-xs transition text-neutral-700 dark:text-neutral-300">
                 <i class="fa-solid fa-moon"></i>
             </button>
-            <span class="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-2.5 py-1 rounded-full shadow-xs">PRO</span>
+            <span class="text-[10px] font-bold text-neutral-500 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-2.5 py-1 rounded-full">PRO</span>
         </div>
     </div>
 
-    <!-- Center Hero / Portal Cards -->
     <main class="w-full max-w-md flex flex-col items-center text-center my-auto py-8">
-        <!-- Logo Pista de Corrida Preto e Branco Oficial -->
         <div class="w-20 h-20 rounded-3xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black tracking-tighter text-3xl shadow-lg mb-5 border-2 border-neutral-800 dark:border-neutral-200">
             <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 10a8 8 0 0 1 16 0v4a8 8 0 0 1-16 0z"></path>
@@ -39,46 +29,133 @@
             </svg>
         </div>
 
-        <h1 class="text-2xl font-black tracking-widest uppercase text-black dark:text-white mb-1">TROPICAL CLUB</h1>
-        <p class="text-xs text-neutral-600 dark:text-neutral-400 font-bold uppercase tracking-widest mb-2">Comunidad Running BRAR &middot; Plan de Entrenamiento</p>
-        <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-xs mb-8">Plataforma de gestão e monitoramento semanal de treinos para atletas e treinadores.</p>
+        <h1 class="text-2xl font-black tracking-widest uppercase mb-1">TROPICAL CLUB</h1>
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 font-bold uppercase tracking-widest mb-6">Comunidad Running BRAR</p>
 
-        <!-- Portals Selection -->
-        <div class="w-full flex flex-col gap-3.5">
-            <!-- Portal Treinador -->
-            <a href="treinador.html" class="group bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white rounded-2xl p-4 text-left transition-all shadow-xs hover:translate-y-[-2px] flex items-center justify-between">
+        <div id="selection-view" class="w-full flex flex-col gap-3.5">
+            <button onclick="showCoachLogin()" class="group bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 text-left transition flex items-center justify-between shadow-xs">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-12 h-12 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-lg font-bold group-hover:scale-105 transition">
+                    <div class="w-12 h-12 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-lg font-bold">
                         <i class="fa-solid fa-stopwatch-20"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-black dark:text-white group-hover:underline transition">Painel do Treinador</h2>
-                        <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Prescrever treinos, monitorar a semana e avaliar feedbacks</p>
+                        <h2 class="text-sm font-bold">Painel do Treinador</h2>
+                        <p class="text-[11px] text-neutral-500">Gestão completa de treinos e alunos</p>
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-right text-neutral-400 group-hover:text-black dark:group-hover:text-white transition text-sm"></i>
-            </a>
+                <i class="fa-solid fa-arrow-right text-neutral-400"></i>
+            </button>
 
-            <!-- Portal Atleta -->
-            <a href="atleta.html" class="group bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-black dark:hover:border-white rounded-2xl p-4 text-left transition-all shadow-xs hover:translate-y-[-2px] flex items-center justify-between">
+            <button onclick="showAthleteLogin()" class="group bg-white dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-4 text-left transition flex items-center justify-between shadow-xs">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-12 h-12 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-lg font-bold group-hover:scale-105 transition">
+                    <div class="w-12 h-12 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center text-lg font-bold">
                         <i class="fa-solid fa-mobile-screen"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-black dark:text-white group-hover:underline transition">App do Atleta (Mobile)</h2>
-                        <p class="text-[11px] text-neutral-500 dark:text-neutral-400">Visualizar programação semanal e registrar corridas</p>
+                        <h2 class="text-sm font-bold">App do Atleta</h2>
+                        <p class="text-[11px] text-neutral-500">Acesse sua planilha pessoal de treinos</p>
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-right text-neutral-400 group-hover:text-black dark:group-hover:text-white transition text-sm"></i>
-            </a>
+                <i class="fa-solid fa-arrow-right text-neutral-400"></i>
+            </button>
+        </div>
+
+        <div id="coach-login-view" class="hidden w-full bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 text-left shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs font-black uppercase tracking-wider">Acesso Restrito do Treinador</h3>
+                <button onclick="hideCoachLogin()" class="text-neutral-400 hover:text-black dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleCoachLogin(event)" class="flex flex-col gap-3">
+                <div>
+                    <label class="text-[11px] font-semibold text-neutral-500 block mb-1">Senha de Acesso</label>
+                    <input type="password" id="coach-password" required placeholder="Digite a senha do coach" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none focus:border-black dark:focus:border-white">
+                </div>
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="hideCoachLogin()" class="flex-1 bg-neutral-200 dark:bg-neutral-800 text-xs font-bold py-2.5 rounded-xl">Voltar</button>
+                    <button type="submit" class="flex-1 bg-black text-white dark:bg-white dark:text-black text-xs font-bold py-2.5 rounded-xl">Entrar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="athlete-login-view" class="hidden w-full bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 text-left shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xs font-black uppercase tracking-wider">Identificação do Atleta</h3>
+                <button onclick="hideAthleteLogin()" class="text-neutral-400 hover:text-black dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleAthleteLogin(event)" class="flex flex-col gap-3">
+                <div>
+                    <label class="text-[11px] font-semibold text-neutral-500 block mb-1">E-mail Cadastrado</label>
+                    <input type="email" id="athlete-email" required placeholder="Ex: camila.duarte@email.com" class="w-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-2.5 text-xs outline-none focus:border-black dark:focus:border-white">
+                    <span class="text-[10px] text-neutral-400 mt-1 block">Digite o e-mail informado ao treinador ao se cadastrar.</span>
+                </div>
+                <div id="login-error" class="hidden text-xs text-rose-500 font-semibold">E-mail não encontrado no sistema. Verifique com seu treinador.</div>
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="hideAthleteLogin()" class="flex-1 bg-neutral-200 dark:bg-neutral-800 text-xs font-bold py-2.5 rounded-xl">Voltar</button>
+                    <button type="submit" class="flex-1 bg-black text-white dark:bg-white dark:text-black text-xs font-bold py-2.5 rounded-xl">Acessar App</button>
+                </div>
+            </form>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="w-full max-w-md text-center pb-4 text-[11px] text-neutral-500 font-medium">
         Tropical Club &middot; Comunidad Running BRAR 🏃
     </footer>
 
+    <script>
+        function showCoachLogin() {
+            document.getElementById('selection-view').classList.add('hidden');
+            document.getElementById('coach-login-view').classList.remove('hidden');
+        }
+        function hideCoachLogin() {
+            document.getElementById('coach-login-view').classList.add('hidden');
+            document.getElementById('selection-view').classList.remove('hidden');
+        }
+        function showAthleteLogin() {
+            document.getElementById('selection-view').classList.add('hidden');
+            document.getElementById('athlete-login-view').classList.remove('hidden');
+        }
+        function hideAthleteLogin() {
+            document.getElementById('athlete-login-view').classList.add('hidden');
+            document.getElementById('selection-view').classList.remove('hidden');
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function handleCoachLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('coach-password').value;
+
+            if (pass === 'admin123' || pass === 'coach2026') {
+                localStorage.setItem('tropical_user_role', 'coach');
+                window.location.href = 'treinador.html';
+            } else {
+                alert('Senha incorreta!');
+            }
+        }
+
+        async function handleAthleteLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('athlete-email').value.trim().toLowerCase();
+            document.getElementById('login-error').classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/runners');
+                const json = await res.json();
+                if (json.success) {
+                    const runner = json.data.find(r => (r.email || '').toLowerCase() === email);
+                    if (runner) {
+                        localStorage.setItem('tropical_user_role', 'athlete');
+                        localStorage.setItem('tropical_runner_id', runner.id);
+                        localStorage.setItem('tropical_runner_name', runner.name);
+                        window.location.href = 'atleta.html';
+                    } else {
+                        document.getElementById('login-error').classList.remove('hidden');
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão com o servidor.');
+            }
+        }
+    </script>
 </body>
 </html>

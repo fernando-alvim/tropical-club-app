@@ -850,21 +850,27 @@
             });
         }
 
-        function renderRosterList() {
+    function renderRosterList() {
             const container = document.getElementById('runners-roster-list');
             container.innerHTML = '';
 
             allRunners.forEach(r => {
                 container.innerHTML += `
                     <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-3 flex flex-col justify-between hover:bg-white dark:hover:bg-neutral-850 transition">
-                        <div class="flex items-center gap-2.5 mb-2">
-                            <div class="w-8 h-8 rounded-full bg-black dark:bg-white text-white dark:text-black font-black text-xs flex items-center justify-center">
-                                ${r.avatar || 'TC'}
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-full bg-black dark:bg-white text-white dark:text-black font-black text-xs flex items-center justify-center shrink-0">
+                                    ${r.avatar || 'TC'}
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="text-xs font-bold text-neutral-900 dark:text-white truncate">${r.name}</h4>
+                                    <span class="text-[10px] text-neutral-500 dark:text-neutral-400 truncate block font-medium">${r.goal || 'Geral'}</span>
+                                </div>
                             </div>
-                            <div class="min-w-0">
-                                <h4 class="text-xs font-bold text-neutral-900 dark:text-white truncate">${r.name}</h4>
-                                <span class="text-[10px] text-neutral-500 dark:text-neutral-400 truncate block font-medium">${r.goal || 'Geral'}</span>
-                            </div>
+                            <!-- Botão de Excluir Atleta -->
+                            <button onclick="deleteRunner('${r.id}', '${r.name}')" title="Excluir atleta" class="p-1.5 text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 transition text-xs">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
 
                         <div class="flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-800 pt-2 mt-1">
@@ -881,6 +887,24 @@
                     </div>
                 `;
             });
+        }
+
+        async function deleteRunner(runnerId, runnerName) {
+            if (!confirm(`Deseja realmente excluir o atleta ${runnerName}? Todos os treinos dele também serão removidos.`)) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/runners/${runnerId}`, { method: 'DELETE' });
+                const json = await res.json();
+                if (json.success) {
+                    alert('Atleta excluído com sucesso!');
+                    loadDashboardData();
+                } else {
+                    alert('Erro ao excluir atleta.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro de conexão ao excluir atleta.');
+            }
         }
 
         // ====================================================
