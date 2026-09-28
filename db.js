@@ -9,23 +9,12 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-function loadData() {
-  if (!fs.existsSync(DB_FILE)) {
-    const initialData = getSeedData();
-    saveData(initialData);
-    return initialData;
-  }
-  try {
-    const raw = fs.readFileSync(DB_FILE, 'utf-8');
-    const data = JSON.parse(raw);
-    
-    // Auto-migração: adiciona glossary, races e gallery caso não existam no db.json
+// Auto-migração: adiciona glossary e gallery caso não existam no db.json
     let modified = false;
     const seed = getSeedData();
-    if (!data.races || data.races.length === 0) {
-      data.races = seed.races;
-      modified = true;
-    }
+    
+    // Removido o bloco de races para permitir que fiquem vazias se o usuário apagar todas
+    
     if (!data.glossary || data.glossary.length === 0) {
       data.glossary = seed.glossary;
       modified = true;
@@ -37,13 +26,7 @@ function loadData() {
     if (modified) {
       saveData(data);
     }
-    return data;
-  } catch (err) {
-    console.error('Erro ao ler db.json, reinicializando com seed:', err);
-    const initialData = getSeedData();
-    saveData(initialData);
-    return initialData;
-  }
+    return data;  }
 }
 
 function saveData(data) {
