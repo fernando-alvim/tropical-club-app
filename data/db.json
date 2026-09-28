@@ -280,74 +280,9 @@
       "icon": "fa-gauge-high"
     }
   ],
-  "races": [
-    {
-      "id": "race-1",
-      "title": "Maratona Internacional de Porto Alegre 2026",
-      "date": "2026-06-07",
-      "city": "Porto Alegre, RS",
-      "country": "Brasil 🇧🇷",
-      "distances": [
-        "42k",
-        "21k",
-        "10k",
-        "5k"
-      ],
-      "badge": "Major Alvo do Clube",
-      "description": "O percurso mais plano e veloz da América Latina, beirando a orla do Guaíba. Prova ideal para bater recorde pessoal (RP) e conquistar índice para a Maratona de Boston.",
-      "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80",
-      "official_url": "https://www.maratonadeportoalegre.com.br"
-    },
-    {
-      "id": "race-2",
-      "title": "Maratón Internacional de Buenos Aires 2026",
-      "date": "2026-09-20",
-      "city": "Buenos Aires",
-      "country": "Argentina 🇦🇷",
-      "distances": [
-        "42k",
-        "21k"
-      ],
-      "badge": "Viagem Oficial BRAR",
-      "description": "A maior maratona da América do Sul! Largada em Palermo passando pelo Obelisco, Casa Rosada, La Boca e Puerto Madero com clima frio e torcida apaixonada pelas ruas.",
-      "image_url": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=80",
-      "official_url": "https://maratondebuenosaires.com"
-    },
-    {
-      "id": "race-3",
-      "title": "Meia Maratona Internacional de Florianópolis",
-      "date": "2026-08-16",
-      "city": "Florianópolis, SC",
-      "country": "Brasil 🇧🇷",
-      "distances": [
-        "21k",
-        "10k",
-        "5k"
-      ],
-      "badge": "Meia Maratona Rápida",
-      "description": "Corrida costeira pelas pontes de Floripa com vista para o mar, brisa oceânica e clima ameno de inverno. Excelente preparação para os maratonistas do segundo semestre.",
-      "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=1200&q=80",
-      "official_url": "https://www.meiamaratonadeflorianopolis.com.br"
-    },
-    {
-      "id": "race-1788447124013",
-      "title": "Media Maratón 21k RUN PUERTO NORTE 2026",
-      "date": "2026-10-04",
-      "city": "Rosario / Argentina",
-      "country": "Brasil 🇧🇷",
-      "distances": [
-        "21k",
-        "10k",
-        "4k"
-      ],
-      "badge": "Prova Oficial",
-      "description": "La prueba comienza en el emblemático Barquito de Papel, un punto de encuentro clásico de la costanera rosarina. Desde allí, el circuito se desarrolla en un trazado dinámico que combina tramos modernos de torres residenciales con la amplitud verde de los parques ribereños.\n\nPrimer tramo (Zona Norte): Los corredores se dirigen hacia el norte por la franja costera, transitando un terreno plano y veloz ideal para buscar ritmo, con vistas abiertas al río hacia la zona de La Florida.\n\nSegundo tramo (Regreso y Parques): Tras el retome correspondiente, la ruta enfilará de regreso hacia el sur, adentrándose por el sistema de parques de la ribera (como Parque España y zonas aledañas), ofreciendo un entorno arbolado y muy pintoresco.\n\nCierre (La Llegada): El tramo final retoma el borde costero rumbo al norte para culminar nuevamente en el Barquito de Papel, donde los participantes cruzarán el arco de meta junto a la costa.",
-      "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=80",
-      "official_url": ""
-    }
-  ],
+  "races": [],
   "gallery": [
-    {
+  {
       "id": "photo-1",
       "title": "Treino de Tiros na Pista",
       "subtitle": "Pelotão de velocidade focado nas séries de 1.000m",
