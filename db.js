@@ -15,19 +15,18 @@ if (!fs.existsSync(DATA_DIR)) {
     
     // Removido o bloco de races para permitir que fiquem vazias se o usuário apagar todas
     
+   let modified = false;
+    const seed = getSeedData();
+    
     if (!data.glossary || data.glossary.length === 0) {
       data.glossary = seed.glossary;
       modified = true;
     }
-    if (!data.gallery || data.gallery.length === 0) {
-      data.gallery = seed.gallery;
-      modified = true;
-    }
+    
     if (modified) {
       saveData(data);
     }
-    return data;  }
-}
+    return data;
 
 function saveData(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
